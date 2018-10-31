@@ -1,0 +1,17 @@
+{
+  "name": "streamdesk",
+  "version": "0.0.1",
+  "description": "A specific HomeDesk installation to use the streamdeck device in my home office setup.",
+  "main": "main.js",
+  "author": "stefan@codingfragments.org",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc -p .",
+    "clean": "rm -rf ./lib/*",
+    "start": "yarn build -- -w"
+  },
+  "devDependencies": {
+    "typescript": "^3.1.4"
+  }
+}
