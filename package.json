@@ -7,11 +7,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc -p .",
+    "build": "echo 'BUILD' && tsc -p .",
     "clean": "rm -rf ./lib/*",
-    "start": "yarn build -- -w"
+    "start": "yarn build -- -w",
+    "main": "yarn build && node main.js"
   },
   "devDependencies": {
+    "@types/node": "^10.12.2",
     "typescript": "^3.1.4"
+  },
+  "dependencies": {
+    "elgato-stream-deck": "^2.1.1"
   }
 }
