@@ -2,7 +2,7 @@ import { strict } from "assert";
 import { EventEmitter } from "events";
 import { DataUtil } from "../utility";
 import { StreamDeckWrapper } from "./deskWrapper";
-const StreamDeck = require("elgato-stream-deck");
+const StreamDeck = require("elgato-stream-deck-clean");
 
 const BUTTON_RANGE = DataUtil.range(0, 14);
 export class DeskStack {
