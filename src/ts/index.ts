@@ -1,9 +1,10 @@
 import { DeskStack } from "./streamdesk/deskstack";
-import { SimpleDeskPage } from "./streamdesk/simpleDeskPage";
+import { SimpleDeskPage } from "./streamdesk/page/simpleDeskPage";
 
 const deck = new DeskStack();
 
-deck.addPage(new SimpleDeskPage("MAIN"));
+const mainPage = new SimpleDeskPage("MAIN");
+deck.addPage(mainPage);
 deck.setMainPage("MAIN");
 
 console.log("READY Press ctrl+c to stop operations !!!");
