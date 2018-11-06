@@ -7,6 +7,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "fullRebuild": "rm -rf node_modules && rm -rf lib/* && yarn install && yarn build ",
+    "rebuild": "yarn clean && yarn build",
     "build": "echo 'BUILD' && tsc -p .",
     "clean": "rm -rf ./lib/*",
     "start": "yarn build -- -w",
@@ -19,5 +21,8 @@
   },
   "dependencies": {
     "elgato-stream-deck": "^2.1.1"
+  },
+  "resolutions": {
+    "node-hid": "0.7.3"
   }
 }
