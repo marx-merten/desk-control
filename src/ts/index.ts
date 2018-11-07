@@ -24,8 +24,8 @@ dd.fillColor(0, 222, 133, 222);
 let xvg = `<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
     <rect id="Rectangle" fill="####COLOR###" x="3" y="3" width="66" height="66" rx="9"></rect>
-    <text id="Jks" font-family="monospace" font-size="14" font-weight="normal" fill="#000000">
-        <tspan x="10" y="63">###TXT###</tspan>
+    <text id="Jks" font-family="monospace" font-size="14" font-weight="normal"
+    fill="#000000" x="###XPOS###" y="62" >###TXT###
     </text>
     <image id="home" x="15" y="7" width="42" height="40" xlink:href="###PNG###"></image>
 </g>
@@ -35,13 +35,15 @@ function convertToBase64(filename: string): string {
   const data = fs.readFileSync(path.resolve("./src/res/home.png"));
   return data.toString("base64");
 }
-
+const txt = "GG";
+const factor = 29 / 7;
 xvg = xvg
   .replace(
     "###PNG###",
     "data:image/png;base64," + convertToBase64("./src/res/home.png"),
   )
-  .replace("###TXT###", "Master")
+  .replace("###TXT###", txt)
+  .replace("###XPOS###", "" + (36 - txt.length * factor))
   .replace("###COLOR###", "EF34EE");
 
 const im = sharp(Buffer.from(xvg));
