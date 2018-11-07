@@ -1,5 +1,5 @@
 import { DeskStack } from "./streamdesk/deskstack";
-import { SimpleDeskPage } from "./streamdesk/SimpleDeskPage";
+import { SimpleDeskPage } from "./streamdesk/simpleDeskPage";
 
 const deck = new DeskStack();
 
