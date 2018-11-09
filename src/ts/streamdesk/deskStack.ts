@@ -4,6 +4,7 @@ import { DeskConfig } from "../deckConfig";
 import { DataUtil } from "../utility";
 import { IDeskButton, KeyCoordinates } from "./deskButton";
 import { StreamDeckWrapper, StreamKeyWrapper } from "./deskWrapper";
+// tslint:disable-next-line:no-var-requires
 const StreamDeck = require("elgato-stream-deck");
 
 export const BUTTON_RANGE = DataUtil.range(0, 14);
@@ -51,7 +52,7 @@ export class DeskStack {
     this.currentFrame.emit(KEY_UP, this.desk.getKeyWrapper(key));
     const pressDuration = this.registerButtonRelease(key);
     // tslint:disable-next-line:no-console
-    if (pressDuration > 10) {
+    if (pressDuration > DeskConfig.clickMinimumTimeMs) {
       this.currentFrame.emit(KEY_CLICK, this.desk.getKeyWrapper(key));
     }
   }
