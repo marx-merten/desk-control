@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { DataUtil } from "../../utility";
 import { IDeskButton } from "../deskButton";
-import { IDeskPage } from "../deskstack";
+import { IDeskPage } from "../deskStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "../deskWrapper";
 
 export class DeskButton extends EventEmitter implements IDeskButton {

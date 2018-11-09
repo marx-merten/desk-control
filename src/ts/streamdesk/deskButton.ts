@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { IDeskPage } from "./deskstack";
+import { IDeskPage } from "./deskStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "./deskWrapper";
 
 export interface IDeskButton extends EventEmitter {

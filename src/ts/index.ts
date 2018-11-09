@@ -1,4 +1,4 @@
-import { DeskStack } from "./streamdesk/deskstack";
+import { DeskStack } from "./streamdesk/deskStack";
 import { DeskButton, SimpleButton } from "./streamdesk/page/simpleDeskButton";
 import { SimpleDeskPage } from "./streamdesk/page/simpleDeskPage";
 

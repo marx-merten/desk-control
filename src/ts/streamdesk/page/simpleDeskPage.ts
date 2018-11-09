@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { DeskConfig } from "../../deckConfig";
 import { IDeskButton, KeyCoordinates } from "../deskButton";
-import { IDeskPage } from "../deskstack";
+import { IDeskPage } from "../deskStack";
 import { KEY_CLICK, KEY_DOWN } from "../deskStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "../deskWrapper";
 
