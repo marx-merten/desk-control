@@ -12,4 +12,4 @@ mainPage.addButton(new SimpleButton("BR"), { x: 4, y: 2 });
 
 deck.setMainPage("MAIN");
 
-console.log("READY Press ctrl+c to stop operations !!!");
+console.log("Desk Started, please press ctrl+c to stop operations !!!");
