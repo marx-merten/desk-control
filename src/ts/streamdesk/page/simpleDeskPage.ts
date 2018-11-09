@@ -16,11 +16,10 @@ export class SimpleDeskPage extends EventEmitter implements IDeskPage {
 
     this.on(KEY_CLICK, (key: StreamKeyWrapper) => {
       // tslint:disable-next-line:no-console
-      console.log(key.keyIndex);
       const b = this.buttons[key.keyIndex];
       if (b !== undefined) {
         // tslint:disable-next-line:no-console
-        console.log(b.state);
+        // console.log(b.state);
       }
     });
   }
