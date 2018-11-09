@@ -2,6 +2,7 @@ import { strict } from "assert";
 import { EventEmitter } from "events";
 import { DeskConfig } from "../deckConfig";
 import { DataUtil } from "../utility";
+import { IDeskButton, KeyCoordinates } from "./deskButton";
 import { StreamDeckWrapper, StreamKeyWrapper } from "./deskWrapper";
 const StreamDeck = require("elgato-stream-deck");
 
@@ -43,15 +44,15 @@ export class DeskStack {
   // --------------------------------------------------------------
 
   public eventDown(key: number): any {
-    this.currentFrame.emit(KEY_DOWN, new StreamKeyWrapper(this.desk, key));
+    this.currentFrame.emit(KEY_DOWN, this.desk.getKeyWrapper(key));
     this.registerButtonPress(key);
   }
   public eventup(key: number): any {
-    this.currentFrame.emit(KEY_UP, new StreamKeyWrapper(this.desk, key));
+    this.currentFrame.emit(KEY_UP, this.desk.getKeyWrapper(key));
     const pressDuration = this.registerButtonRelease(key);
     // tslint:disable-next-line:no-console
     if (pressDuration > 10) {
-      this.currentFrame.emit(KEY_CLICK, new StreamKeyWrapper(this.desk, key));
+      this.currentFrame.emit(KEY_CLICK, this.desk.getKeyWrapper(key));
     }
   }
 
@@ -105,4 +106,10 @@ export interface IDeskPage extends EventEmitter {
   name: string;
 
   activate(deck: StreamDeckWrapper): void;
+  deactivate(): void;
+
+  addButton(button: IDeskButton, pos?: KeyCoordinates): this;
+  removeButton(pos: KeyCoordinates): this;
+  redrawAll(): void;
+  clear(): this;
 }
