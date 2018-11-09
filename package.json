@@ -1,6 +1,6 @@
 {
   "name": "streamdesk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A specific HomeDesk installation to use the streamdeck device in my home office setup.",
   "main": "main.js",
   "author": "stefan@codingfragments.org",
