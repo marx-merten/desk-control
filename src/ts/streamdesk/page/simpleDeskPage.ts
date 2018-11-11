@@ -1,8 +1,7 @@
 import { EventEmitter } from "events";
 import { DeskConfig } from "../../deckConfig";
 import { IDeskButton, KeyCoordinates } from "../deskButton";
-import { IDeskPage } from "../deskStack";
-import { KEY_CLICK, KEY_DOWN } from "../deskStack";
+import { IDeskPage, KEY_CLICK, KEY_DOWN, KEY_UP } from "../deskStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "../deskWrapper";
 
 export class SimpleDeskPage extends EventEmitter implements IDeskPage {
@@ -14,12 +13,22 @@ export class SimpleDeskPage extends EventEmitter implements IDeskPage {
     super();
     this.name = name;
 
-    this.on(KEY_CLICK, (key: StreamKeyWrapper) => {
-      // tslint:disable-next-line:no-console
+    this.on(KEY_DOWN, (key: StreamKeyWrapper) => {
       const b = this.buttons[key.keyIndex];
       if (b !== undefined) {
-        // tslint:disable-next-line:no-console
-        // console.log(b.state);
+        b.emit(KEY_DOWN, key);
+      }
+    });
+    this.on(KEY_UP, (key: StreamKeyWrapper) => {
+      const b = this.buttons[key.keyIndex];
+      if (b !== undefined) {
+        b.emit(KEY_UP, key);
+      }
+    });
+    this.on(KEY_CLICK, (key: StreamKeyWrapper) => {
+      const b = this.buttons[key.keyIndex];
+      if (b !== undefined) {
+        b.emit(KEY_CLICK, key);
       }
     });
   }
