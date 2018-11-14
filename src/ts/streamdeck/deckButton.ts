@@ -1,10 +1,10 @@
 import { EventEmitter } from "events";
-import { IDeskPage } from "./deskStack";
-import { StreamDeckWrapper, StreamKeyWrapper } from "./deskWrapper";
+import { IDeckPage } from "./deckStack";
+import { StreamDeckWrapper, StreamKeyWrapper } from "./deckWrapper";
 
-export interface IDeskButton extends EventEmitter {
+export interface IDeckButton extends EventEmitter {
   readonly state: string;
-  page?: IDeskPage;
+  page?: IDeckPage;
   activate(deck: StreamKeyWrapper): void;
   deActivate(): void;
   draw(): void;

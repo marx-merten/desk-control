@@ -1,13 +1,13 @@
 import { EventEmitter } from "events";
-import { DeskConfig } from "../../deckConfig";
-import { IDeskButton, KeyCoordinates } from "../deskButton";
-import { IDeskPage, KEY_CLICK, KEY_DOWN, KEY_UP } from "../deskStack";
-import { StreamDeckWrapper, StreamKeyWrapper } from "../deskWrapper";
+import { DeckConfig } from "../../deckConfig";
+import { IDeckButton, KeyCoordinates } from "../deckButton";
+import { IDeckPage, KEY_CLICK, KEY_DOWN, KEY_UP } from "../deckStack";
+import { StreamDeckWrapper, StreamKeyWrapper } from "../deckWrapper";
 
-export class SimpleDeskPage extends EventEmitter implements IDeskPage {
+export class SimpleDeckPage extends EventEmitter implements IDeckPage {
   public name: string;
   public deck?: StreamDeckWrapper;
-  public buttons = new Array<IDeskButton | undefined>(DeskConfig.numberOfButtons);
+  public buttons = new Array<IDeckButton | undefined>(DeckConfig.numberOfButtons);
 
   constructor(name: string) {
     super();
@@ -51,7 +51,7 @@ export class SimpleDeskPage extends EventEmitter implements IDeskPage {
     return this.deck !== undefined;
   }
 
-  public addButton(button: IDeskButton, pos?: KeyCoordinates): this {
+  public addButton(button: IDeckButton, pos?: KeyCoordinates): this {
     if (pos !== undefined) {
       this.buttons[this.getButtonIndex(pos)] = button;
       if (this.isActive) {
@@ -76,7 +76,7 @@ export class SimpleDeskPage extends EventEmitter implements IDeskPage {
         button.deActivate();
       }
     });
-    this.buttons = new Array(DeskConfig.numberOfButtons);
+    this.buttons = new Array(DeckConfig.numberOfButtons);
     return this;
   }
 

@@ -6,7 +6,7 @@ export class StreamDeckWrapper {
     this.deck = deck;
   }
 
-  // Fill Color on Desk Button
+  // Fill Color on  Button
   public fillColor(keyIndex: number, r = 0, g = 0, b = 0) {
     this.deck.fillColor(keyIndex, r, g, b);
   }
@@ -51,7 +51,7 @@ export class StreamKeyWrapper {
     this.keyIndex = keyIndex;
   }
 
-  // Fill Color on Desk Button
+  // Fill Color on Button
   public fillColor(r = 0, g = 0, b = 0) {
     this.deck.fillColor(this.keyIndex, r, g, b);
   }

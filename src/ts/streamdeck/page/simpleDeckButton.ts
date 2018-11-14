@@ -1,11 +1,11 @@
 import { EventEmitter } from "events";
 import { DataUtil } from "../../utility";
-import { IDeskButton } from "../deskButton";
-import { IDeskPage, KEY_CLICK } from "../deskStack";
-import { StreamKeyWrapper } from "../deskWrapper";
+import { IDeckButton } from "../deckButton";
+import { IDeckPage, KEY_CLICK } from "../deckStack";
+import { StreamKeyWrapper } from "../deckWrapper";
 
-export class DeskButton extends EventEmitter implements IDeskButton {
-  public page?: IDeskPage;
+export class DeckButton extends EventEmitter implements IDeckButton {
+  public page?: IDeckPage;
   public deckKey?: StreamKeyWrapper;
 
   public activate(key: StreamKeyWrapper): void {
@@ -24,7 +24,7 @@ export class DeskButton extends EventEmitter implements IDeskButton {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class SimpleButton extends DeskButton {
+export class SimpleButton extends DeckButton {
   public name: string;
   constructor(name: string) {
     super();

@@ -1,11 +1,11 @@
-import { DeskStack, KEY_CLICK } from "./streamdesk/deskStack";
-import { StreamKeyWrapper } from "./streamdesk/deskWrapper";
-import { DeskButton, SimpleButton } from "./streamdesk/page/simpleDeskButton";
-import { SimpleDeskPage } from "./streamdesk/page/simpleDeskPage";
+import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
+import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
+import { DeckButton, SimpleButton } from "./streamdeck/page/simpleDeckButton";
+import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 
-const deck = new DeskStack();
+const deck = new DeckStack();
 
-const mainPage = new SimpleDeskPage("MAIN");
+const mainPage = new SimpleDeckPage("MAIN");
 deck.addPage(mainPage);
 const b = new SimpleButton("TL");
 
@@ -18,4 +18,5 @@ mainPage.addButton(new SimpleButton("BR"), { x: 4, y: 2 });
 
 deck.setMainPage("MAIN");
 
-console.log("Desk Started, please press ctrl+c to stop operations !!!");
+// tslint:disable-next-line:no-console
+console.log("Deck Started, please press ctrl + c to stop operations !!!");

@@ -1,9 +1,9 @@
 import { strict } from "assert";
 import { EventEmitter } from "events";
-import { DeskConfig } from "../deckConfig";
+import { DeckConfig } from "../deckConfig";
 import { DataUtil } from "../utility";
-import { IDeskButton, KeyCoordinates } from "./deskButton";
-import { StreamDeckWrapper, StreamKeyWrapper } from "./deskWrapper";
+import { IDeckButton, KeyCoordinates } from "./deckButton";
+import { StreamDeckWrapper, StreamKeyWrapper } from "./deckWrapper";
 // tslint:disable-next-line:no-var-requires
 const StreamDeck = require("elgato-stream-deck");
 
@@ -12,30 +12,30 @@ export const KEY_DOWN = "keyDown";
 export const KEY_UP = "keyUp";
 export const KEY_CLICK = "keyClick";
 
-export class DeskStack {
-  get currentFrame(): IDeskPage {
+export class DeckStack {
+  get currentFrame(): IDeckPage {
     if (this.currentStack.length < 1) {
       throw new Error("No Pages defined");
     } else {
       return this.currentStack[this.currentStack.length - 1];
     }
   }
-  public desk: StreamDeckWrapper;
-  public mainPage?: IDeskPage;
-  public pages: { [id: string]: IDeskPage } = {};
+  public deck: StreamDeckWrapper;
+  public mainPage?: IDeckPage;
+  public pages: { [id: string]: IDeckPage } = {};
 
-  private currentStack: IDeskPage[] = [];
-  private buttonTimings = new Array<number>(DeskConfig.numberOfButtons);
+  private currentStack: IDeckPage[] = [];
+  private buttonTimings = new Array<number>(DeckConfig.numberOfButtons);
 
   constructor() {
-    this.desk = new StreamDeckWrapper(new StreamDeck());
-    this.desk.deck.on("down", (key: number) => {
+    this.deck = new StreamDeckWrapper(new StreamDeck());
+    this.deck.deck.on("down", (key: number) => {
       this.eventDown(key);
     });
-    this.desk.deck.on("up", (key: number) => {
+    this.deck.deck.on("up", (key: number) => {
       this.eventup(key);
     });
-    this.desk.deck.on("error", (error: any) => {
+    this.deck.deck.on("error", (error: any) => {
       // tslint:disable-next-line:no-console
       console.log("Error: " + error);
     });
@@ -45,24 +45,24 @@ export class DeskStack {
   // --------------------------------------------------------------
 
   public eventDown(key: number): any {
-    this.currentFrame.emit(KEY_DOWN, this.desk.getKeyWrapper(key));
+    this.currentFrame.emit(KEY_DOWN, this.deck.getKeyWrapper(key));
     this.registerButtonPress(key);
   }
   public eventup(key: number): any {
-    this.currentFrame.emit(KEY_UP, this.desk.getKeyWrapper(key));
+    this.currentFrame.emit(KEY_UP, this.deck.getKeyWrapper(key));
     const pressDuration = this.registerButtonRelease(key);
     // tslint:disable-next-line:no-console
-    if (pressDuration > DeskConfig.clickMinimumTimeMs) {
-      this.currentFrame.emit(KEY_CLICK, this.desk.getKeyWrapper(key));
+    if (pressDuration > DeckConfig.clickMinimumTimeMs) {
+      this.currentFrame.emit(KEY_CLICK, this.deck.getKeyWrapper(key));
     }
   }
 
-  public addPage(page: IDeskPage): DeskStack {
+  public addPage(page: IDeckPage): DeckStack {
     this.pages[page.name] = page;
     return this;
   }
 
-  public setMainPage(page: string | IDeskPage) {
+  public setMainPage(page: string | IDeckPage) {
     let resolvedPage;
     if (typeof page === "string") {
       resolvedPage = this.pages[page];
@@ -97,19 +97,19 @@ export class DeskStack {
   }
 
   private redrawFull() {
-    // clear desk and redraw using all fields and current stack page.
-    this.desk.clearAllKeys();
-    this.currentFrame.activate(this.desk);
+    // clear Deck and redraw using all fields and current stack page.
+    this.deck.clearAllKeys();
+    this.currentFrame.activate(this.deck);
   }
 }
 
-export interface IDeskPage extends EventEmitter {
+export interface IDeckPage extends EventEmitter {
   name: string;
 
   activate(deck: StreamDeckWrapper): void;
   deactivate(): void;
 
-  addButton(button: IDeskButton, pos?: KeyCoordinates): this;
+  addButton(button: IDeckButton, pos?: KeyCoordinates): this;
   removeButton(pos: KeyCoordinates): this;
   redrawAll(): void;
   clear(): this;
