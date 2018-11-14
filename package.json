@@ -23,6 +23,8 @@
     "typescript": "^3.1.4"
   },
   "dependencies": {
+    "@types/color": "^3.0.0",
+    "color": "^3.1.0",
     "elgato-stream-deck": "^2.1.1"
   },
   "bin": {
