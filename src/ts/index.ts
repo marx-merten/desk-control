@@ -13,6 +13,7 @@ const b = new SimpleButton("TL", new RandomColorLabel());
 b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
   // tslint:disable-next-line:no-console
   console.log("Pressed");
+  b.markDirty();
 });
 mainPage.addButton(b, { x: 0, y: 0 });
 mainPage.addButton(new SimpleButton("BR", new RandomColorLabel()), { x: 4, y: 2 });

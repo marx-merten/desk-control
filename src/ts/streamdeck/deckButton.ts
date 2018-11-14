@@ -12,7 +12,7 @@ export interface IDeckButton extends EventEmitter {
   activate(deck: StreamKeyWrapper): void;
   deActivate(): void;
   draw(): void;
-  dirty(): void;
+  markDirty(): void;
 }
 
 export class KeyCoordinates {
@@ -59,7 +59,7 @@ export class DeckButton extends EventEmitter implements IDeckButton {
     this.deckLabel.draw(this.deckKey!);
   }
 
-  public dirty() {
+  public markDirty() {
     if (this.active) {
       this.draw();
     }
