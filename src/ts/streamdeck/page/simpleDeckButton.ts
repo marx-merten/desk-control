@@ -1,33 +1,20 @@
 import { EventEmitter } from "events";
 import { DataUtil } from "../../utility";
-import { IDeckButton } from "../deckButton";
+import { DeckButton, IDeckButton } from "../deckButton";
+import { DeckButtonLabel } from "../deckButtonLabel";
 import { IDeckPage, KEY_CLICK } from "../deckStack";
 import { StreamKeyWrapper } from "../deckWrapper";
-
-export class DeckButton extends EventEmitter implements IDeckButton {
-  public page?: IDeckPage;
-  public deckKey?: StreamKeyWrapper;
-
-  public activate(key: StreamKeyWrapper): void {
-    this.deckKey = key;
-  }
-  public deActivate(): void {
-    this.deckKey = undefined;
-  }
-
-  public get state(): string {
-    return "";
-  }
-  public draw(): void {
-    this.deckKey!.fillColor(DataUtil.random(0, 255), DataUtil.random(0, 255), DataUtil.random(0, 255));
-  }
-}
+import { RandomColorLabel } from "./simpleLabels";
 
 // tslint:disable-next-line:max-classes-per-file
 export class SimpleButton extends DeckButton {
   public name: string;
-  constructor(name: string) {
-    super();
+  constructor(name: string, lbl?: DeckButtonLabel) {
+    if (lbl !== undefined) {
+      super(lbl);
+    } else {
+      super(new RandomColorLabel());
+    }
     this.name = name;
   }
 
