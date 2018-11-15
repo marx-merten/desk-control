@@ -4,6 +4,7 @@ import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
 import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { ColorLabel, RandomColorLabel, StateSwitchLabel } from "./streamdeck/page/simpleLabels";
+import { SvgLabel } from "./streamdeck/page/svgLabel";
 
 const deck = new DeckStack();
 
@@ -34,6 +35,7 @@ mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]
 mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
 mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
 mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
+mainPage.addButton(new SimpleButton("BR", new SvgLabel()), { x: 4, y: 2 });
 
 deck.setMainPage("MAIN");
 
