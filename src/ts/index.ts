@@ -4,6 +4,7 @@ import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
 import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { ColorLabel, RandomColorLabel, StateSwitchLabel } from "./streamdeck/page/simpleLabels";
+import { SvgLabel } from "./streamdeck/page/svgLabel";
 
 const deck = new DeckStack();
 
@@ -22,12 +23,14 @@ b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
   const s = sl.state;
   if (s === "ON") {
     sl.state = "OFF";
-  } else { sl.state = "ON"; }
+  } else {
+    sl.state = "ON";
+  }
   b.markDirty();
 });
 mainPage.addButton(b, { x: 0, y: 0 });
 
-mainPage.addButton(new SimpleButton("BR", new ColorLabel(Color.rgb([50, 50, 50]).negate())), { x: 4, y: 2 });
+mainPage.addButton(new SimpleButton("BR", new SvgLabel()), { x: 4, y: 2 });
 
 deck.setMainPage("MAIN");
 
