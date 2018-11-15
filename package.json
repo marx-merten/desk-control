@@ -12,7 +12,8 @@
     "build": "echo 'BUILD' && tsc -p .",
     "clean": "rm -rf ./lib/*",
     "start": "yarn build -- -w",
-    "main": "yarn build && node main.js"
+    "main": "yarn build && node main.js",
+    "exe": "node main.js"
   },
   "files": [
     "lib"
