@@ -22,12 +22,18 @@ b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
   const s = sl.state;
   if (s === "ON") {
     sl.state = "OFF";
-  } else { sl.state = "ON"; }
+  } else {
+    sl.state = "ON";
+  }
   b.markDirty();
 });
-mainPage.addButton(b, { x: 0, y: 0 });
 
 mainPage.addButton(new SimpleButton("BR", new ColorLabel(Color.rgb([50, 50, 50]).negate())), { x: 4, y: 2 });
+mainPage.addButton(b);
+mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
+mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
+mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
+mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
 
 deck.setMainPage("MAIN");
 

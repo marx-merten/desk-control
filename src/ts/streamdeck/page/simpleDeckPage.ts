@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import { DeckConfig } from "../../deckConfig";
+import { DataUtil } from "../../utility";
 import { IDeckButton, KeyCoordinates } from "../deckButton";
 import { IDeckPage, KEY_CLICK, KEY_DOWN, KEY_UP } from "../deckStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "../deckWrapper";
@@ -56,6 +57,21 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
       this.buttons[this.getButtonIndex(pos)] = button;
       if (this.isActive) {
         button.activate(this.deck!.getKeyWrapper(this.getButtonIndex(pos)));
+      }
+    } else {
+      emptyLoop: for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 5; x++) {
+          const p = this.getButtonIndex({ x, y });
+          const b = this.buttons[p];
+          if (b === undefined) {
+            console.log("Found " + x + "." + y);
+            this.buttons[p] = button;
+            if (this.isActive) {
+              button.activate(this.deck!.getKeyWrapper(p));
+            }
+            break emptyLoop;
+          }
+        }
       }
     }
     return this;
