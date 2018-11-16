@@ -69,7 +69,6 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
           const p = this.getButtonIndex({ x, y });
           const b = this.buttons[p];
           if (b === undefined) {
-            console.log("Found " + x + "." + y);
             this.buttons[p] = button;
             if (this.isActive) {
               button.activate(this.deck!.getKeyWrapper(p));
