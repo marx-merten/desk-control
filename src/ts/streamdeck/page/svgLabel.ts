@@ -82,6 +82,8 @@ const TEMPLATE_CHAR_LABEL = `
     </g>
 </svg>
 `;
+const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 export class SvgLabel extends DeckButtonLabel {
   private static cache = new SVGCache();
   public color = colorGet("black")!.value;
@@ -92,6 +94,25 @@ export class SvgLabel extends DeckButtonLabel {
   constructor(template = BASIC_TEMPLATE) {
     super();
     this.svgTemplate = template;
+    this.delayRecache(200);
+  }
+
+  public async delayRecache(ms: number) {
+    await wait(ms);
+    this.precache();
+  }
+  public precache(): any {
+    const svgSrc = this.prepareSvg(this.svgTemplate);
+    if (!SvgLabel.cache.isCached(svgSrc)) {
+      const im = sharp(Buffer.from(svgSrc));
+      im.resize(DeckConfig.ICON_SIZE, DeckConfig.ICON_SIZE)
+        .flatten()
+        .raw()
+        .toBuffer()
+        .then((buffer: any) => {
+          SvgLabel.cache.cacheImage(svgSrc, buffer);
+        });
+    }
   }
 
   public prepareSvg(svg: string): string {
