@@ -46,13 +46,18 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
 
   public deactivate(): void {
     this.deck = undefined;
+    this.buttons.forEach((button, i: number) => {
+      if (button !== undefined) {
+        button.deActivate();
+      }
+    });
   }
 
   public get isActive(): boolean {
     return this.deck !== undefined;
   }
 
-  public addButton(button: IDeckButton, pos?: KeyCoordinates): this {
+  public addButton(button: IDeckButton, pos?: KeyCoordinates): IDeckButton {
     if (pos !== undefined) {
       this.buttons[this.getButtonIndex(pos)] = button;
       if (this.isActive) {
@@ -74,7 +79,7 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
         }
       }
     }
-    return this;
+    return button;
   }
 
   public removeButton(pos: KeyCoordinates): this {

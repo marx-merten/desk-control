@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import { Color, get as colorGet, to as colorTo } from "color-string";
 import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
 import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
@@ -5,50 +6,29 @@ import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { ColorLabel, RandomColorLabel, StateSwitchLabel } from "./streamdeck/page/simpleLabels";
 import { CharacterLabel, IconLabel, SvgLabel } from "./streamdeck/page/svgLabel";
+import { DataUtil } from "./utility";
 
+import * as fs from "fs";
+import * as path from "path";
+import { ICON_CONFIG } from "./streamdeck/page/logos";
+import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 const deck = new DeckStack();
 
+const subPage = new SubMenu("SUB", deck);
+for (let i = 0; i < 12; i++) {
+  subPage.addButton(new SimpleButton("nope", new ColorLabel("darkgreen")));
+}
+
+deck.addPage(subPage);
+
 const mainPage = new SimpleDeckPage("MAIN");
+mainPage
+  .addButton(new SimpleButton("open", new IconLabel(ICON_CONFIG, "config")))
+  .on(KEY_CLICK, (key: StreamKeyWrapper) => {
+    deck.jumpPage("SUB");
+  });
+
 deck.addPage(mainPage);
-const sl = new StateSwitchLabel();
-sl.addState("ON", new ColorLabel([0, 200, 0, 0]));
-sl.addState("OFF", new ColorLabel([200, 0, 0, 0]));
-sl.state = "ON";
-
-const b = new SimpleButton("TL", sl);
-
-b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
-  // tslint:disable-next-line:no-console
-  console.log("Pressed");
-  const s = sl.state;
-  if (s === "ON") {
-    sl.state = "OFF";
-  } else {
-    sl.state = "ON";
-  }
-  b.markDirty();
-});
-
-mainPage.addButton(b);
-mainPage.addButton(new SimpleButton("TL", new ColorLabel("red")));
-mainPage.addButton(new SimpleButton("TL", new ColorLabel("dodgerblue")));
-mainPage.addButton(new SimpleButton("TL", new ColorLabel("lightsteelblue")));
-mainPage.addButton(new SimpleButton("BR", new SvgLabel()), { x: 4, y: 2 });
-mainPage.addButton(new SimpleButton("BR", new IconLabel("./src/res/icons/line/png/compact-disc-1.png", "ll")), {
-  x: 4,
-  y: 2,
-});
-mainPage.addButton(new SimpleButton("", new CharacterLabel("A")), {
-  x: 2,
-  y: 2,
-});
-
-mainPage.addButton(new SimpleButton("", new CharacterLabel("A", "Home")), {
-  x: 3,
-  y: 2,
-});
-
 deck.setMainPage("MAIN");
-console.log(colorGet("darkgreen"));
-// tslint:disable-next-line:no-console
+
 console.log("Deck Started, please press ctrl + c to stop operations !!!");
