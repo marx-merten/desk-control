@@ -74,6 +74,32 @@ export class DeckStack {
     }
 
     this.currentStack = [resolvedPage];
+    this.updateFrame();
+  }
+  public jumpPage(page: string): any {
+    let resolvedPage;
+    if (typeof page === "string") {
+      resolvedPage = this.pages[page];
+      if (resolvedPage === undefined) {
+        throw new Error(" Couldnt find Page with ID: " + page);
+      }
+    } else {
+      resolvedPage = page;
+    }
+    this.currentFrame.deactivate();
+    this.currentStack.push(resolvedPage);
+    this.updateFrame();
+  }
+  public returnToPrevious(): void {
+    if (this.currentStack.length < 2) {
+      return;
+    } // do nothing because no subframe
+    const current = this.currentStack.pop();
+    current!.deactivate();
+    this.updateFrame();
+  }
+
+  private updateFrame() {
     this.redrawFull();
     this.clearButtonTimings();
   }
@@ -109,7 +135,7 @@ export interface IDeckPage extends EventEmitter {
   activate(deck: StreamDeckWrapper): void;
   deactivate(): void;
 
-  addButton(button: IDeckButton, pos?: KeyCoordinates): this;
+  addButton(button: IDeckButton, pos?: KeyCoordinates): IDeckButton;
   removeButton(pos: KeyCoordinates): this;
   redrawAll(): void;
   clear(): this;

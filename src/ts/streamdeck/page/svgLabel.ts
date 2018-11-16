@@ -82,8 +82,8 @@ const TEMPLATE_CHAR_LABEL = `
 </svg>
 `;
 export class SvgLabel extends DeckButtonLabel {
-  public color = colorGet("#000000")!.value;
-  public background = colorGet("#5886AA")!.value;
+  public color = colorGet("black")!.value;
+  public background = colorGet("lightsteelblue")!.value;
 
   public svgTemplate: string;
 
@@ -154,16 +154,18 @@ export class IconLabel extends SvgLabel {
   public prepareSvg(svg: string): string {
     let svgResult = super.prepareSvg(svg);
     const iconBase64 = this.loadIcon(this.icon);
-    svgResult = svgResult
-      .replace(/###ICON###/g, "data:image/png;base64," + iconBase64)
-      .replace(/###LABEL###/g, this.label);
+    svgResult = svgResult.replace(/###ICON###/g, iconBase64).replace(/###LABEL###/g, this.label);
     const factor = (72 - 2.4 * 2) / 8 / 2;
     const pos = 36.5 - factor * this.label.length;
 
     return svgResult.replace(/###POS###/g, "" + pos);
   }
   private loadIcon(filename: string): string {
+    if (filename.startsWith("data:image/png;base64")) {
+      return filename;
+    }
+
     const data = fs.readFileSync(path.resolve(filename));
-    return data.toString("base64");
+    return "data:image/png;base64," + data.toString("base64");
   }
 }
