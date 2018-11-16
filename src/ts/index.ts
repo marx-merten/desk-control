@@ -2,6 +2,7 @@
 import { Color, get as colorGet, to as colorTo } from "color-string";
 import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
 import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
+import { ICON_CONFIG } from "./streamdeck/page/logos";
 import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { ColorLabel, RandomColorLabel, StateSwitchLabel } from "./streamdeck/page/simpleLabels";
@@ -10,13 +11,12 @@ import { DataUtil } from "./utility";
 
 import * as fs from "fs";
 import * as path from "path";
-import { ICON_CONFIG } from "./streamdeck/page/logos";
 import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 const deck = new DeckStack();
 
 const subPage = new SubMenu("SUB", deck);
 for (let i = 0; i < 12; i++) {
-  subPage.addButton(new SimpleButton("nope", new ColorLabel("darkgreen")));
+  subPage.addButton(new SimpleButton("nope", new IconLabel(ICON_CONFIG, "ICON:" + i)));
 }
 
 deck.addPage(subPage);
