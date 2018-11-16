@@ -9,6 +9,7 @@ import { StreamKeyWrapper } from "../deckWrapper";
 
 import * as fs from "fs";
 import * as path from "path";
+import { SVGCache } from "./svgCache";
 
 const BASIC_TEMPLATE = `
 <svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -82,6 +83,7 @@ const TEMPLATE_CHAR_LABEL = `
 </svg>
 `;
 export class SvgLabel extends DeckButtonLabel {
+  private static cache = new SVGCache();
   public color = colorGet("black")!.value;
   public background = colorGet("lightsteelblue")!.value;
 
@@ -97,16 +99,23 @@ export class SvgLabel extends DeckButtonLabel {
       .replace(/###BACKGROUND###/g, colorTo.hex(this.background))
       .replace(/###COLOR###/g, colorTo.hex(this.color));
   }
-  public draw(key: StreamKeyWrapper): void {
-    const im = sharp(Buffer.from(this.prepareSvg(this.svgTemplate)));
 
-    im.resize(DeckConfig.ICON_SIZE, DeckConfig.ICON_SIZE)
-      .flatten()
-      .raw()
-      .toBuffer()
-      .then((buffer: any) => {
-        return key.fillImage(buffer);
-      });
+  public draw(key: StreamKeyWrapper): void {
+    const svgSrc = this.prepareSvg(this.svgTemplate);
+    if (SvgLabel.cache.isCached(svgSrc)) {
+      const buffer = SvgLabel.cache.retrieve(svgSrc)!;
+      key.fillImage(buffer);
+    } else {
+      const im = sharp(Buffer.from(svgSrc));
+      im.resize(DeckConfig.ICON_SIZE, DeckConfig.ICON_SIZE)
+        .flatten()
+        .raw()
+        .toBuffer()
+        .then((buffer: any) => {
+          SvgLabel.cache.cacheImage(svgSrc, buffer);
+          return key.fillImage(buffer);
+        });
+    }
   }
 }
 export class CharacterLabel extends SvgLabel {

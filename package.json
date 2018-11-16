@@ -29,7 +29,8 @@
     "@types/sharp": "^0.21.0",
     "color": "^3.1.0",
     "color-string": "^1.5.3",
-    "elgato-stream-deck": "^2.1.1"
+    "elgato-stream-deck": "^2.1.1",
+    "ts-md5": "^1.2.4"
   },
   "bin": {
     "marxDesk": "main.js"
