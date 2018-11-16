@@ -1,4 +1,4 @@
-import * as Color from "color";
+import { Color, get as colorGet, to as colorTo } from "color-string";
 import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
 import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
 import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
@@ -11,8 +11,8 @@ const deck = new DeckStack();
 const mainPage = new SimpleDeckPage("MAIN");
 deck.addPage(mainPage);
 const sl = new StateSwitchLabel();
-sl.addState("ON", new ColorLabel(Color.rgb([0, 200, 0])));
-sl.addState("OFF", new ColorLabel(Color.rgb([200, 0, 0])));
+sl.addState("ON", new ColorLabel([0, 200, 0, 0]));
+sl.addState("OFF", new ColorLabel([200, 0, 0, 0]));
 sl.state = "ON";
 
 const b = new SimpleButton("TL", sl);
@@ -29,12 +29,10 @@ b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
   b.markDirty();
 });
 
-mainPage.addButton(new SimpleButton("BR", new ColorLabel(Color.rgb([50, 50, 50]).negate())), { x: 4, y: 2 });
 mainPage.addButton(b);
-mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
-mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
-mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
-mainPage.addButton(new SimpleButton("TL", new ColorLabel(Color.rgb([250, 50, 50]))));
+mainPage.addButton(new SimpleButton("TL", new ColorLabel("red")));
+mainPage.addButton(new SimpleButton("TL", new ColorLabel("dodgerblue")));
+mainPage.addButton(new SimpleButton("TL", new ColorLabel("lightsteelblue")));
 mainPage.addButton(new SimpleButton("BR", new SvgLabel()), { x: 4, y: 2 });
 mainPage.addButton(new SimpleButton("BR", new IconLabel("./src/res/icons/line/png/compact-disc-1.png", "ll")), {
   x: 4,
@@ -51,6 +49,6 @@ mainPage.addButton(new SimpleButton("", new CharacterLabel("A", "Home")), {
 });
 
 deck.setMainPage("MAIN");
-
+console.log(colorGet("darkgreen"));
 // tslint:disable-next-line:no-console
 console.log("Deck Started, please press ctrl + c to stop operations !!!");

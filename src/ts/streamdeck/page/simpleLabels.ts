@@ -1,6 +1,6 @@
 // tslint:disable:max-classes-per-file
 
-import * as Color from "color";
+import { Color, get as colorGet, to as colorTo } from "color-string";
 import { type } from "os";
 import { DataUtil } from "../../utility";
 import { DeckButtonLabel } from "../deckButtonLabel";
@@ -13,13 +13,20 @@ export class RandomColorLabel extends DeckButtonLabel {
 }
 
 export class ColorLabel extends DeckButtonLabel {
-  private background: Color;
-  public constructor(color: Color) {
+  private background: Color = colorGet("lightgrey")!.value;
+  public constructor(color: Color | string) {
     super();
-    this.background = color;
+    if (typeof color === "string") {
+      const c1 = colorGet(color);
+      if (c1 !== null) {
+        this.background = c1.value;
+      }
+    } else {
+      this.background = color;
+    }
   }
   public draw(key: StreamKeyWrapper): void {
-    const rgb = this.background.rgb().array();
+    const rgb = this.background;
     key.fillColor(rgb[0], rgb[1], rgb[2]);
   }
 }
