@@ -94,7 +94,7 @@ export class SvgLabel extends DeckButtonLabel {
   constructor(template = BASIC_TEMPLATE) {
     super();
     this.svgTemplate = template;
-    this.delayRecache(200);
+    this.delayRecache(10);
   }
 
   public async delayRecache(ms: number) {
