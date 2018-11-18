@@ -288,6 +288,11 @@ expand-template@^1.0.2:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-1.1.1.tgz#981f188c0c3a87d2e28f559bc541426ff94f21dd"
   integrity sha512-cebqLtV8KOZfw0UI8TEFWxtczxxC1jvyUvx6H4fyp1K1FN7A4Q+uggVUlOsI1K8AGU0rwOGqP8nCapdrw8CYQg==
 
+expect-telnet@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/expect-telnet/-/expect-telnet-1.0.0.tgz#10ca1fd507c517636640e827054fe267c8f461f3"
+  integrity sha512-N/KP7k7GD9e8+QeFB7rvPFl0j+up9Ph73ppKDFhC/T404BJXkICsmCn+GGJ+VVj0ycwdpznO9AjCKbFOb1W3VQ==
+
 fs-constants@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"

@@ -30,6 +30,7 @@
     "color": "^3.1.0",
     "color-string": "^1.5.3",
     "elgato-stream-deck": "^2.1.1",
+    "expect-telnet": "^1.0.0",
     "ts-md5": "^1.2.4"
   },
   "bin": {
