@@ -11,7 +11,7 @@ export class SubMenu extends SimpleDeckPage {
   constructor(name: string, stack: DeckStack) {
     super(name);
     this.stack = stack;
-    this.exitButton = new SimpleButton("exit", new IconLabel(ICONS.CONFIG, "exit"));
+    this.exitButton = new SimpleButton("exit", new IconLabel(ICONS.EXIT));
     this.exitButton.on(KEY_CLICK, (key: StreamKeyWrapper) => {
       this.stack.returnToPrevious();
     });
