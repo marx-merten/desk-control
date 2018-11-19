@@ -11,13 +11,9 @@ import { KVM_RI_RESULT, KVM_RO_RESULT, KvmConnector } from "../streamdeck/connec
 
 const cmd = new KvmConnector("vm0808hb:23", "deskkvm", "kvmkvm");
 cmd
-  .addCommand(
-    "RI 01",
-    (res) => {
-      console.log(res);
-    },
-    KVM_RI_RESULT,
-  )
+  .addCommand("SS 01,01", (res) => {
+    console.log(res);
+  })
 
   .addCommand(
     "RO 01",
