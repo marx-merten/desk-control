@@ -15,10 +15,11 @@ import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 const deck = new DeckStack();
 
 const subPage = new SubMenu("SUB", deck);
-for (let i = 0; i < 12; i++) {
-  subPage.addButton(new SimpleButton("nope", new IconLabel(ICONS.ALARM, "ICON:" + i)));
-}
 
+const ICON = [ICONS.FOLDER, ICONS.FOLDER_OPEN, ICONS.FREV, ICONS.GLOBE, ICONS.HOME, ICONS.KVM];
+ICON.forEach((ico) => {
+  subPage.addButton(new SimpleButton("MM", new IconLabel(ico)));
+});
 deck.addPage(subPage);
 
 const mainPage = new SimpleDeckPage("MAIN");
