@@ -1,6 +1,5 @@
+import { KVM_RI_RESULT, KVM_RO_RESULT, KvmConnector } from "../streamdeck/connectors/kvmConnector";
 // tslint:disable:no-console
-// tslint:disable-next-line:no-var-requires
-let et: any = require("expect-telnet");
 
 // Typical session Enter Username:leika
 // Password:********
@@ -10,29 +9,39 @@ let et: any = require("expect-telnet");
 // Input Port 01 is connected to Output Port 01
 // ctrl+q to end
 
-let done = false;
-et(
-  "vm0808hb:23",
-  [
-    { expect: "Enter Username:", send: "leika\r" },
-    { expect: "Password:", send: "wunedowe\r" },
-    { expect: ">", send: "RO 01\r" },
-    {
-      expect: ">",
-      out: (output: any) => {
-        done = true;
-        console.log(output);
-      },
-      send: "\x11",
+const cmd = new KvmConnector("vm0808hb:23", "deskkvm", "kvmkvm");
+cmd
+  .addCommand(
+    "RI 01",
+    (res) => {
+      console.log(res);
     },
-  ],
-  { exit: true },
-  (err: string) => {
-    if (err.toString().includes("ECONNRESET") && done) {
-      return;
-    } else {
-      console.log("Error happened");
-      console.log(err);
-    }
-  },
-);
+    KVM_RI_RESULT,
+  )
+
+  .addCommand(
+    "RO 01",
+    (res) => {
+      console.log(res![2]);
+    },
+    KVM_RO_RESULT,
+  )
+  .addCommand(
+    "RO 02",
+    (res) => {
+      console.log(res![2]);
+    },
+    KVM_RO_RESULT,
+  )
+  .addCommand(
+    "RO 03",
+    (res) => {
+      console.log(res![2]);
+    },
+    KVM_RO_RESULT,
+  )
+  .finish();
+
+cmd.execute((err: string) => {
+  console.log(err);
+});
