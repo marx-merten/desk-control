@@ -8,12 +8,16 @@ import { IconLabel } from "./svgLabel";
 export class SubMenu extends SimpleDeckPage {
   public stack: DeckStack;
   private exitButton: SimpleButton;
-  constructor(name: string, stack: DeckStack) {
+  constructor(name: string, stack: DeckStack, returnTo?: string) {
     super(name);
     this.stack = stack;
     this.exitButton = new SimpleButton("exit", new IconLabel(ICONS.EXIT));
     this.exitButton.on(KEY_CLICK, (key: StreamKeyWrapper) => {
-      this.stack.returnToPrevious();
+      if (returnTo === undefined) {
+        this.stack.returnToPrevious();
+      } else {
+        this.stack.returnTo(returnTo);
+      }
     });
     this.addButton(this.exitButton, { x: 4, y: 2 });
   }

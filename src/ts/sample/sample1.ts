@@ -4,117 +4,114 @@ import { DeckStack, KEY_CLICK } from "../streamdeck/deckStack";
 import { StreamKeyWrapper } from "../streamdeck/deckWrapper";
 import { SimpleButton } from "../streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "../streamdeck/page/simpleDeckPage";
-import { IconLabel } from "../streamdeck/page/svgLabel";
+import { CharacterLabel, IconLabel } from "../streamdeck/page/svgLabel";
 
 import { ICONS } from "../streamdeck/page/logos";
 import { SubMenu } from "../streamdeck/page/submenueDeckPage";
 
-export function main() {
-  const deck = new DeckStack();
-
-  const mainPage = new SimpleDeckPage("MAIN");
-  mainPage.addButton(new SimpleButton("sub1", new IconLabel(ICONS.FOLDER, "sub1"))).on(KEY_CLICK, () => {
-    deck.jumpPage("SUB1");
-  });
-  mainPage.addButton(new SimpleButton("sub2", new IconLabel(ICONS.FOLDER, "sub2"))).on(KEY_CLICK, () => {
-    deck.jumpPage("SUB2");
-  });
-  mainPage.addButton(new SimpleButton("sub3", new IconLabel(ICONS.FOLDER, "sub3"))).on(KEY_CLICK, () => {
-    deck.jumpPage("SUB3");
-  });
-  mainPage.addButton(new SimpleButton("sub4", new IconLabel(ICONS.FOLDER, "sub4"))).on(KEY_CLICK, () => {
-    deck.jumpPage("SUB4");
-  });
-
-  deck.addPage(mainPage);
+export function main(deck: DeckStack) {
   deck.addPage(
     createSamplePage(
-      "SUB1",
+      "DEMO1",
       [
-        ICONS.ALARM,
-        ICONS.ALARM_ON,
-        ICONS.ARCHIVE,
-        ICONS.BULB,
-        ICONS.CAL,
-        ICONS.CAM,
-        ICONS.CHECKED,
-        ICONS.CLOUD_INOUT,
-        ICONS.CLOUD_OUT,
-        ICONS.CONFIG,
-        ICONS.DB,
-        ICONS.EJECT,
+        { lbl: "ALARM", ico: ICONS.ALARM },
+        { lbl: "ALARM_ON", ico: ICONS.ALARM_ON },
+        { lbl: "ARCHIVE", ico: ICONS.ARCHIVE },
+        { lbl: "BULB", ico: ICONS.BULB },
+        { lbl: "CAL", ico: ICONS.CAL },
+        { lbl: "CAM", ico: ICONS.CAM },
+        { lbl: "CHECKED", ico: ICONS.CHECKED },
+        { lbl: "CLOUD_INOUT", ico: ICONS.CLOUD_INOUT },
+        { lbl: "CLOUD_OUT", ico: ICONS.CLOUD_OUT },
+        { lbl: "CONFIG", ico: ICONS.CONFIG },
+        { lbl: "DB", ico: ICONS.DB },
+        { lbl: "EJECT", ico: ICONS.EJECT },
       ],
-      "lightcoral",
+      "lightgrey",
+      "DEMO2",
     ),
   );
   deck.addPage(
     createSamplePage(
-      "SUB2",
+      "DEMO2",
       [
-        ICONS.EXIT,
-        ICONS.FF,
-        ICONS.FOLDER,
-        ICONS.FOLDER_OPEN,
-        ICONS.FREV,
-        ICONS.GLOBE,
-        ICONS.HOME,
-        ICONS.KVM,
-        ICONS.LOCKED,
-        ICONS.MENU,
-        ICONS.MIC,
-        ICONS.MIC_MUTE,
-        ICONS.MUTE,
+        { lbl: "EXIT", ico: ICONS.EXIT },
+        { lbl: "FF", ico: ICONS.FF },
+        { lbl: "FOLDER", ico: ICONS.FOLDER },
+        { lbl: "FOLDER_OPEN", ico: ICONS.FOLDER_OPEN },
+        { lbl: "FREV", ico: ICONS.FREV },
+        { lbl: "GLOBE", ico: ICONS.GLOBE },
+        { lbl: "HOME", ico: ICONS.HOME },
+        { lbl: "KVM", ico: ICONS.KVM },
+        { lbl: "LOCKED", ico: ICONS.LOCKED },
+        { lbl: "MENU", ico: ICONS.MENU },
+        { lbl: "MIC", ico: ICONS.MIC },
+        { lbl: "MIC_MUTE", ico: ICONS.MIC_MUTE },
+        { lbl: "MUTE", ico: ICONS.MUTE },
       ],
-      "lightgreen",
+      "lightgrey",
+      "DEMO3",
     ),
   );
   deck.addPage(
     createSamplePage(
-      "SUB3",
+      "DEMO3",
       [
-        ICONS.NEXT,
-        ICONS.PAUSE,
-        ICONS.PLAY,
-        ICONS.PLUS,
-        ICONS.POWER,
-        ICONS.PREVIOUS,
-        ICONS.PRINT,
-        ICONS.RADAR,
-        ICONS.SEARCH,
-        ICONS.SERVER,
-        ICONS.STOP,
-        ICONS.SW_OFF,
-        ICONS.SW_ON,
+        { lbl: "NEXT", ico: ICONS.NEXT },
+        { lbl: "PAUSE", ico: ICONS.PAUSE },
+        { lbl: "PLAY", ico: ICONS.PLAY },
+        { lbl: "PLUS", ico: ICONS.PLUS },
+        { lbl: "POWER", ico: ICONS.POWER },
+        { lbl: "PREVIOUS", ico: ICONS.PREVIOUS },
+        { lbl: "PRINT", ico: ICONS.PRINT },
+        { lbl: "RADAR", ico: ICONS.RADAR },
+        { lbl: "SEARCH", ico: ICONS.SEARCH },
+        { lbl: "SERVER", ico: ICONS.SERVER },
+        { lbl: "STOP", ico: ICONS.STOP },
+        { lbl: "SW_OFF", ico: ICONS.SW_OFF },
+        { lbl: "SW_ON", ico: ICONS.SW_ON },
       ],
-      "lightseagreen",
+      "lightgrey",
+      "DEMO4",
     ),
   );
   deck.addPage(
     createSamplePage(
-      "SUB4",
+      "DEMO4",
       [
-        ICONS.UNLOCKED,
-        ICONS.USER,
-        ICONS.VOLUME,
-        ICONS.VOLUME_DOWN,
-        ICONS.VOLUME_UP,
-        ICONS.WAIT,
-        ICONS.WIFI,
-        ICONS.WINDOWS,
-        ICONS.ZOOM_IN,
-        ICONS.ZOOM_OUT,
+        { lbl: "UNLOCKED", ico: ICONS.UNLOCKED },
+        { lbl: "USER", ico: ICONS.USER },
+        { lbl: "VOLUME", ico: ICONS.VOLUME },
+        { lbl: "VOLUME_DOWN", ico: ICONS.VOLUME_DOWN },
+        { lbl: "VOLUME_UP", ico: ICONS.VOLUME_UP },
+        { lbl: "WAIT", ico: ICONS.WAIT },
+        { lbl: "WIFI", ico: ICONS.WIFI },
+        { lbl: "WINDOWS", ico: ICONS.WINDOWS },
+        { lbl: "ZOOM_IN", ico: ICONS.ZOOM_IN },
+        { lbl: "ZOOM_OUT", ico: ICONS.ZOOM_OUT },
       ],
-      "deepskyblue",
+      "lightgrey",
+      "DEMO1",
     ),
   );
 
-  deck.setMainPage("MAIN");
-
-  console.log("Deck Started, please press ctrl + c to stop operations !!!");
-  function createSamplePage(name: string, ICONS: string[], color = "lightsteelblue") {
-    const subPage = new SubMenu(name, deck);
-    ICONS.forEach((ico) => {
-      const lbl = new IconLabel(ico);
+  function createSamplePage(
+    name: string,
+    ic: Array<{ lbl: string; ico: string }>,
+    color = "lightsteelblue",
+    nextPage = "MAIN",
+  ) {
+    const subPage = new SubMenu(name, deck, "MAIN");
+    subPage.addButton(
+      new SimpleButton("next", new CharacterLabel("N", "next")).on(
+        KEY_CLICK,
+        (key: any) => {
+          deck.jumpPage(nextPage);
+        },
+      ),
+    );
+    ic.forEach((ico) => {
+      const lbl = new IconLabel(ico.ico, ico.lbl);
       lbl.background = colorGet(color)!.value;
       subPage.addButton(new SimpleButton("MM", lbl));
     });

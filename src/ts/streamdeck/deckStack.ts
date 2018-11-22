@@ -99,7 +99,33 @@ export class DeckStack {
     this.updateFrame();
   }
 
+  public returnTo(page: string): void {
+    if (this.currentStack.length <= 1) {
+      return;
+    } // Do Nothing, Main Page
+
+    let p = this.currentStack.pop()!;
+    while (p.name !== page) {
+      p.deactivate();
+      if (this.currentStack.length === 0) { break; }
+      else { p = this.currentStack.pop()!; }
+    }
+    this.currentStack.push(p);
+    this.updateFrame();
+  }
+
   private updateFrame() {
+    console.log(this.currentFrame.name);
+    console.log("STACK:");
+    console.log(
+      this.currentStack
+        .slice()
+        .reverse()
+        .map((val) => {
+          return val.name;
+        }),
+    );
+
     this.redrawFull();
     this.clearButtonTimings();
   }

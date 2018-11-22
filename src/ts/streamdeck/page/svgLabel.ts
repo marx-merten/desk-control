@@ -161,10 +161,14 @@ export class CharacterLabel extends SvgLabel {
     svgResult = svgResult
       .replace(/###TXT###/g, this.txt)
       .replace(/###LABEL###/g, this.label)
-      .replace(/###FRAME-COLOR###/g, this.disableFrame ? colorTo.hex(this.background) : colorTo.hex(this.color))
+      .replace(
+        /###FRAME-COLOR###/g,
+        this.disableFrame
+          ? colorTo.hex(this.background)
+          : colorTo.hex(this.color),
+      )
       .replace(/###POS###/g, "" + pos);
 
-    console.log(svgResult);
     return svgResult;
   }
 }
@@ -184,7 +188,9 @@ export class IconLabel extends SvgLabel {
   public prepareSvg(svg: string): string {
     let svgResult = super.prepareSvg(svg);
     const iconBase64 = this.loadIcon(this.icon);
-    svgResult = svgResult.replace(/###ICON###/g, iconBase64).replace(/###LABEL###/g, this.label);
+    svgResult = svgResult
+      .replace(/###ICON###/g, iconBase64)
+      .replace(/###LABEL###/g, this.label);
     const factor = (72 - 2.4 * 2) / 8 / 2;
     const pos = 36.5 - factor * this.label.length;
 
