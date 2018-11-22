@@ -87,7 +87,7 @@ const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export class SvgLabel extends DeckButtonLabel {
   private static cache = new SVGCache();
   public color = colorGet("black")!.value;
-  public background = colorGet("lightsteelblue")!.value;
+  public background = colorGet("lightgrey")!.value;
 
   public svgTemplate: string;
 
