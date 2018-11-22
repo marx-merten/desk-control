@@ -20,7 +20,6 @@ deck.addPage(page);
 deck.setMainPage("MAIN");
 
 // tslint:disable-next-line:no-console
-
 const logger = setInterval(() => {
   logPrecache();
 }, 1000);
