@@ -107,25 +107,17 @@ export class DeckStack {
     let p = this.currentStack.pop()!;
     while (p.name !== page) {
       p.deactivate();
-      if (this.currentStack.length === 0) { break; }
-      else { p = this.currentStack.pop()!; }
+      if (this.currentStack.length === 0) {
+        break;
+      } else {
+        p = this.currentStack.pop()!;
+      }
     }
     this.currentStack.push(p);
     this.updateFrame();
   }
 
   private updateFrame() {
-    console.log(this.currentFrame.name);
-    console.log("STACK:");
-    console.log(
-      this.currentStack
-        .slice()
-        .reverse()
-        .map((val) => {
-          return val.name;
-        }),
-    );
-
     this.redrawFull();
     this.clearButtonTimings();
   }

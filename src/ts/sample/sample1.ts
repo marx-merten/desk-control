@@ -109,6 +109,7 @@ export function main(deck: DeckStack) {
           deck.jumpPage(nextPage);
         },
       ),
+      { x: 3, y: 2 },
     );
     ic.forEach((ico) => {
       const lbl = new IconLabel(ico.ico, ico.lbl);
