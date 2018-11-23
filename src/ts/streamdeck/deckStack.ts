@@ -28,7 +28,7 @@ export class DeckStack {
   private buttonTimings = new Array<number>(DeckConfig.numberOfButtons);
 
   constructor() {
-    this.deck = new StreamDeckWrapper(new StreamDeck());
+    this.deck = new StreamDeckWrapper(new StreamDeck(), this);
     this.deck.deck.on("down", (key: number) => {
       this.eventDown(key);
     });

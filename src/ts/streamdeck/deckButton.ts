@@ -67,7 +67,7 @@ export class DeckButton extends EventEmitter implements IDeckButton {
   }
   public jumpOnClick(page: string): this {
     this.on(KEY_CLICK, (key: StreamKeyWrapper) => {
-      key.deck.jumpPage(page);
+      key.stack.jumpPage(page);
     });
     return this;
   }
