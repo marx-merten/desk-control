@@ -1,6 +1,6 @@
 // tslint:disable:no-console
 import { Color, get as colorGet, to as colorTo } from "color-string";
-import { DeckStack, KEY_CLICK } from "../streamdeck/deckStack";
+import { DeckStack, IDeckPage, KEY_CLICK } from "../streamdeck/deckStack";
 import { StreamKeyWrapper } from "../streamdeck/deckWrapper";
 import { SimpleButton } from "../streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "../streamdeck/page/simpleDeckPage";
@@ -10,6 +10,16 @@ import { ICONS } from "../streamdeck/page/logos";
 import { SubMenu } from "../streamdeck/page/submenueDeckPage";
 
 export function main(deck: DeckStack) {
+  const page = deck.currentFrame;
+  const l = new CharacterLabel("D", undefined, true);
+  l.background = colorGet("darkgrey")!.value;
+  page.addButton(
+    new SimpleButton("next", l).on(KEY_CLICK, (key: any) => {
+      deck.jumpPage("DEMO1");
+    }),
+    { x: 4, y: 0 },
+  );
+
   deck.addPage(
     createSamplePage(
       "DEMO1",
