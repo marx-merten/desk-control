@@ -71,7 +71,7 @@ favs
 
 favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
-    x: 0,
+    x: 1,
     y: 1,
   })
   .on(KEY_CLICK, () => {
@@ -86,7 +86,7 @@ deck.addPage(favs);
 page
   .addButton(
     new SimpleButton("favs", new IconLabel(ICONS.FOLDER, "favorite")),
-    { x: 4, y: 0 },
+    { x: 0, y: 0 },
   )
   .jumpOnClick("FAVS");
 
