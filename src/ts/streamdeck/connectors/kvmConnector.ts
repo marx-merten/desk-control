@@ -65,6 +65,7 @@ export class KvmConnector {
   public execute(errorCb: (error: any) => void): Promise<number> {
     return new Promise<number>((resolve, reject) => {
       this.addCommand("\r", (res) => {
+        this.finished = true;
         resolve(0);
       });
       this.finish();

@@ -8,7 +8,11 @@ import { StreamKeyWrapper } from "../deckWrapper";
 
 export class RandomColorLabel extends DeckButtonLabel {
   public draw(key: StreamKeyWrapper): void {
-    key.fillColor(DataUtil.random(100, 200), DataUtil.random(20, 200), DataUtil.random(100, 200));
+    key.fillColor(
+      DataUtil.random(100, 200),
+      DataUtil.random(20, 200),
+      DataUtil.random(100, 200),
+    );
   }
 }
 
@@ -45,18 +49,29 @@ export class StateSwitchLabel extends DeckButtonLabel {
   }
 
   set state(s: string | undefined) {
-    if (this.states.has(s!)) {
-      this.currentState = { state: s!, label: this.states.get(s!)! };
+    if (s !== undefined && this.states.has(s)) {
+      this.currentState = { state: s, label: this.states.get(s)! };
     } else {
       this.currentState = this.defaultLabel;
+    }
+    if (this.button !== undefined) {
+      this.button.markDirty();
     }
   }
   set default(lbl: DeckButtonLabel) {
     this.defaultLabel = { state: "___UNDEFINED___", label: lbl };
+    if (this.button !== undefined) {
+      this.button.markDirty();
+    }
+    this.currentState = this.defaultLabel;
   }
 
   public addState(state: string, lbl: DeckButtonLabel): this {
-    this.states.set(state, lbl);
+    if (state === "___UNDEFINED___") {
+      this.default = lbl;
+    } else {
+      this.states.set(state, lbl);
+    }
     return this;
   }
 

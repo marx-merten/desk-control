@@ -2,7 +2,7 @@
 import { EventEmitter } from "events";
 import { DataUtil } from "../utility";
 import { DeckButtonLabel } from "./deckButtonLabel";
-import { IDeckPage, KEY_CLICK } from "./deckStack";
+import { IDeckPage, KEY_CLICK, KEY_DOWN, KEY_UP } from "./deckStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "./deckWrapper";
 
 export interface IDeckButton extends EventEmitter {
@@ -14,6 +14,11 @@ export interface IDeckButton extends EventEmitter {
   draw(): void;
   markDirty(): void;
   jumpOnClick(page: string): this;
+
+  on(
+    event: "keyDown" | "keyUp" | "keyClick",
+    cb: (key: StreamKeyWrapper) => any,
+  ): this;
 }
 
 export class KeyCoordinates {
@@ -33,10 +38,15 @@ export class DeckButton extends EventEmitter implements IDeckButton {
   constructor(lbl: DeckButtonLabel) {
     super();
     this.deckLabel = lbl;
+    this.deckLabel.button = this;
   }
 
   set label(lbl: DeckButtonLabel) {
+    if (this.deckLabel !== undefined) {
+      this.deckLabel.button = undefined;
+    }
     this.deckLabel = lbl;
+    this.deckLabel.button = this;
   }
   get label() {
     return this.deckLabel;

@@ -157,4 +157,11 @@ export interface IDeckPage extends EventEmitter {
   removeButton(pos: KeyCoordinates): this;
   redrawAll(): void;
   clear(): this;
+
+  on(
+    event: "keyDown" | "keyUp" | "keyClick",
+    cb: (key: StreamKeyWrapper) => any,
+  ): this;
+
+  on(event: "ACTIVATED" | "DEACTIVATED", cb: () => any): this;
 }
