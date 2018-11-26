@@ -1,5 +1,6 @@
 import { Color, get as colorGet, to as colorTo } from "color-string";
-import { main } from "./sample/sample1";
+import { DeckConfig } from "./deckConfig";
+import { main as demoMain } from "./sample/sample1";
 import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
 import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
 import { KVMPage } from "./streamdeck/homeDeck/kvmPage";
@@ -23,17 +24,23 @@ deck.setMainPage("MAIN");
 // ---------------
 //    Demo PAGE
 // ---------------
-main(deck);
+// demoMain(deck);
 
 // ---------------
 //    KVM PAGE
 // ---------------
 deck.addPage(new KVMPage("kvm", deck));
 page
-  .addButton(new SimpleButton("kvm", new IconLabel(ICONS.KVM)), {
-    x: 0,
-    y: 0,
-  })
+  .addButton(
+    new SimpleButton(
+      "kvm",
+      new IconLabel(ICONS.KVM).setBackground(DeckConfig.colDefault),
+    ),
+    {
+      x: 0,
+      y: 0,
+    },
+  )
   .jumpOnClick("kvm");
 
 // ---------------------------
@@ -47,8 +54,8 @@ const logger = setInterval(() => {
 
 function logPrecache() {
   // tslint:disable-next-line:no-console
-  console.log("Caching:" + SvgLabel.precacheInFlight);
-  if (SvgLabel.precacheInFlight === 0) {
+  console.log("Caching:" + SvgLabel.precacheInFlight.size);
+  if (SvgLabel.precacheInFlight.size === 0) {
     // tslint:disable-next-line:no-console
     console.log("Deck Started, please press ctrl + c to stop operations !!!");
     clearInterval(logger);

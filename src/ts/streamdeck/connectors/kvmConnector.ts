@@ -21,7 +21,20 @@ export class KvmConnector {
     this.commands.push({ expect: "Password:", send: password + "\r" });
   }
 
-  public addCommand(cmd: string, resultCb?: (results?: any[]) => void, regexp?: string): this {
+  public clear() {
+    this.commands = [];
+    this.commands.push({
+      expect: "Enter Username:",
+      send: this.username + "\r",
+    });
+    this.commands.push({ expect: "Password:", send: this.password + "\r" });
+  }
+
+  public addCommand(
+    cmd: string,
+    resultCb?: (results?: any[]) => void,
+    regexp?: string,
+  ): this {
     const c: any = { expect: ">", send: cmd + "\r" };
     if (this.nextOutputCB !== undefined) {
       c.out = this.nextOutputCB;
@@ -49,7 +62,30 @@ export class KvmConnector {
     return this;
   }
 
-  public finish(): this {
+  public execute(errorCb: (error: any) => void): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this.addCommand("\r", (res) => {
+        resolve(0);
+      });
+      this.finish();
+      this.finished = false;
+      et(this.host, this.commands, (error: any) => {
+        if (error === undefined) {
+          // tslint:disable-next-line:no-console
+          console.log("error undefined");
+        } else {
+          if (error.toString().includes("ECONNRESET") && this.finished) {
+            return;
+          } else {
+            errorCb(error);
+            reject();
+          }
+        }
+      });
+    });
+  }
+
+  private finish(): this {
     this.addCommand("\r", (a: any) => {
       this.finished = true;
     });
@@ -60,16 +96,5 @@ export class KvmConnector {
     }
     this.commands.push(c);
     return this;
-  }
-
-  public execute(errorCb: (error: any) => void): void {
-    this.finished = false;
-    et(this.host, this.commands, (error: any) => {
-      if (error.toString().includes("ECONNRESET") && this.finished) {
-        return;
-      } else {
-        errorCb(error);
-      }
-    });
   }
 }

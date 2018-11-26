@@ -37,12 +37,16 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
   }
 
   public activate(deck: StreamDeckWrapper) {
+    const wasActive = this.isActive;
     this.deck = deck;
     this.buttons.forEach((button, i: number) => {
       if (button !== undefined) {
         button.activate(this.deck!.getKeyWrapper(i));
       }
     });
+    if (!wasActive) {
+      this.emit("ACTIVATED");
+    }
     this.redrawAll();
   }
 
@@ -53,6 +57,7 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
         button.deActivate();
       }
     });
+    this.emit("DEACTIVATED");
   }
 
   public get isActive(): boolean {
