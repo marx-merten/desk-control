@@ -1,9 +1,14 @@
+import { DeckStack } from "./deckStack";
+
+// tslint:disable-next-line:no-var-requires
 const StreamDeck = require("elgato-stream-deck");
 
 export class StreamDeckWrapper {
   public deck: any;
-  constructor(deck: any) {
+  public stack: DeckStack;
+  constructor(deck: any, stack: DeckStack) {
     this.deck = deck;
+    this.stack = stack;
   }
 
   // Fill Color on  Button
@@ -37,18 +42,24 @@ export class StreamDeckWrapper {
     this.deck.setBrightness(percentage);
   }
 
-  public getKeyWrapper(key: number): StreamKeyWrapper {
-    return new StreamKeyWrapper(this.deck, key);
+  public getKeyWrapper(key: number, stack?: DeckStack): StreamKeyWrapper {
+    return new StreamKeyWrapper(this, key, stack);
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
 export class StreamKeyWrapper {
   public keyIndex: number;
-  public deck: any;
-  constructor(deck: any, keyIndex: number) {
+  public deck: StreamDeckWrapper;
+  public stack: DeckStack;
+  constructor(deck: StreamDeckWrapper, keyIndex: number, stack?: DeckStack) {
     this.deck = deck;
     this.keyIndex = keyIndex;
+    if (stack !== undefined) {
+      this.stack = stack;
+    } else {
+      this.stack = deck.stack;
+    }
   }
 
   // Fill Color on Button

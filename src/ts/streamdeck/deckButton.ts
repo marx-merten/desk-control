@@ -2,7 +2,7 @@
 import { EventEmitter } from "events";
 import { DataUtil } from "../utility";
 import { DeckButtonLabel } from "./deckButtonLabel";
-import { IDeckPage } from "./deckStack";
+import { IDeckPage, KEY_CLICK } from "./deckStack";
 import { StreamDeckWrapper, StreamKeyWrapper } from "./deckWrapper";
 
 export interface IDeckButton extends EventEmitter {
@@ -13,6 +13,7 @@ export interface IDeckButton extends EventEmitter {
   deActivate(): void;
   draw(): void;
   markDirty(): void;
+  jumpOnClick(page: string): this;
 }
 
 export class KeyCoordinates {
@@ -63,5 +64,11 @@ export class DeckButton extends EventEmitter implements IDeckButton {
     if (this.active) {
       this.draw();
     }
+  }
+  public jumpOnClick(page: string): this {
+    this.on(KEY_CLICK, (key: StreamKeyWrapper) => {
+      key.stack.jumpPage(page);
+    });
+    return this;
   }
 }

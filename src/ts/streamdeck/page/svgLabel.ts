@@ -85,10 +85,10 @@ const TEMPLATE_CHAR_LABEL = `
 const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export class SvgLabel extends DeckButtonLabel {
-  public static precacheInFlight = 0;
+  public static precacheInFlight: Set<string> = new Set();
   private static cache = new SVGCache();
   public color = colorGet("black")!.value;
-  public background = colorGet("lightgrey")!.value;
+  public background = colorGet("lightsteelblue")!.value;
 
   public svgTemplate: string;
 
@@ -98,22 +98,43 @@ export class SvgLabel extends DeckButtonLabel {
     this.delayRecache(10);
   }
 
+  public setForeground(cl: Color): this {
+    this.color = cl;
+    this.markDirty();
+    return this;
+  }
+
+  public setBackground(cl: Color): this {
+    this.background = cl;
+    this.markDirty();
+    return this;
+  }
+
+  public markDirty() {
+    this.delayRecache(10);
+  }
+
   public async delayRecache(ms: number) {
     await wait(ms);
     this.precache();
   }
+
   public precache(): any {
-    SvgLabel.precacheInFlight++;
     const svgSrc = this.prepareSvg(this.svgTemplate);
     if (!SvgLabel.cache.isCached(svgSrc)) {
       const im = sharp(Buffer.from(svgSrc));
+      SvgLabel.precacheInFlight.add(svgSrc);
+
       im.resize(DeckConfig.ICON_SIZE, DeckConfig.ICON_SIZE)
         .flatten()
         .raw()
         .toBuffer()
         .then((buffer: any) => {
           SvgLabel.cache.cacheImage(svgSrc, buffer);
-          SvgLabel.precacheInFlight--;
+          SvgLabel.precacheInFlight.delete(svgSrc);
+        })
+        .catch((reason) => {
+          SvgLabel.precacheInFlight.delete(svgSrc);
         });
     }
   }
@@ -157,6 +178,11 @@ export class CharacterLabel extends SvgLabel {
     this.disableFrame = disableFrame;
   }
   public prepareSvg(svg: string): string {
+    if (this.label !== "") {
+      this.svgTemplate = TEMPLATE_CHAR_LABEL;
+    } else {
+      this.svgTemplate = TEMPLATE_CHAR;
+    }
     let svgResult = super.prepareSvg(svg);
 
     const factor = (72 - 2.4 * 2) / 8 / 2;

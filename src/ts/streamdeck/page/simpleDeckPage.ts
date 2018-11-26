@@ -8,7 +8,9 @@ import { StreamDeckWrapper, StreamKeyWrapper } from "../deckWrapper";
 export class SimpleDeckPage extends EventEmitter implements IDeckPage {
   public name: string;
   public deck?: StreamDeckWrapper;
-  public buttons = new Array<IDeckButton | undefined>(DeckConfig.numberOfButtons);
+  public buttons = new Array<IDeckButton | undefined>(
+    DeckConfig.numberOfButtons,
+  );
 
   constructor(name: string) {
     super();
@@ -35,12 +37,16 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
   }
 
   public activate(deck: StreamDeckWrapper) {
+    const wasActive = this.isActive;
     this.deck = deck;
     this.buttons.forEach((button, i: number) => {
       if (button !== undefined) {
         button.activate(this.deck!.getKeyWrapper(i));
       }
     });
+    if (!wasActive) {
+      this.emit("ACTIVATED");
+    }
     this.redrawAll();
   }
 
@@ -51,6 +57,7 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
         button.deActivate();
       }
     });
+    this.emit("DEACTIVATED");
   }
 
   public get isActive(): boolean {
@@ -62,6 +69,7 @@ export class SimpleDeckPage extends EventEmitter implements IDeckPage {
       this.buttons[this.getButtonIndex(pos)] = button;
       if (this.isActive) {
         button.activate(this.deck!.getKeyWrapper(this.getButtonIndex(pos)));
+        this.redrawAll();
       }
     } else {
       emptyLoop: for (let y = 0; y < 3; y++) {
