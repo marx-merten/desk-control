@@ -24,7 +24,10 @@ export function createMqttIconStateButton(
   );
 
   states.forEach((st) => {
-    lbl.addState(st.state, new IconLabel(st.icon, st.lbl));
+    lbl.addState(
+      st.state,
+      new IconLabel(st.icon, st.lbl === undefined ? label : st.lbl),
+    );
   });
 
   lbl.addState(
@@ -74,5 +77,43 @@ export function createMqttPowerStateButton(
     const newState = lbl.state === "true" ? "false" : "true";
     mqqt.publish(setTopic, newState);
   });
+  return b;
+}
+
+export function createMqttDimStateButton(
+  mqtt: MqttClient,
+  name: string,
+  topic: string,
+  increment: number,
+  label?: string,
+  setTopic = topic,
+  icon = ICONS.BULB,
+  min = 0,
+  max = 100,
+) {
+  const lbl = new IconLabel(icon, label);
+  const b = new SimpleButton(name, lbl);
+  let currentLevel = 0;
+
+  mqtt.subscribe(topic);
+  mqtt.on("message", (t, load) => {
+    if (t === topic) {
+      currentLevel = Number(load.toString());
+    }
+  });
+
+  b.on(KEY_CLICK, () => {
+    let newLevel = currentLevel + increment;
+    newLevel -= newLevel % increment;
+    if (newLevel < min) {
+      newLevel = min;
+    }
+    if (newLevel > max) {
+      newLevel = max;
+    }
+
+    mqtt.publish(setTopic, newLevel.toString());
+  });
+
   return b;
 }

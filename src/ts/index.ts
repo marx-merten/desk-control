@@ -4,6 +4,7 @@ import { DeckConfig } from "./deckConfig";
 import { main as demoMain } from "./sample/sample1";
 import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
 import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
+import { createMqttDimStateButton } from "./streamdeck/homeDeck/buttonTemplates";
 import { KVMPage } from "./streamdeck/homeDeck/kvmPage";
 import { ICONS } from "./streamdeck/page/logos";
 import { MqttLabel } from "./streamdeck/page/mqttLabel";
@@ -46,7 +47,7 @@ page
       new IconLabel(ICONS.KVM).setBackground(DeckConfig.colDefault),
     ),
     {
-      x: 0,
+      x: 1,
       y: 0,
     },
   )
@@ -71,7 +72,7 @@ favs
 
 favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
-    x: 1,
+    x: 0,
     y: 1,
   })
   .on(KEY_CLICK, () => {
@@ -152,8 +153,8 @@ m1.on("connect", () => {
       ICONS.SW_OFF,
     ),
     {
-      x: 3,
-      y: 2,
+      x: 1,
+      y: 1,
     },
   );
   page.addButton(
@@ -167,8 +168,8 @@ m1.on("connect", () => {
       ICONS.SW_OFF,
     ),
     {
-      x: 4,
-      y: 2,
+      x: 2,
+      y: 1,
     },
   );
 
@@ -195,6 +196,53 @@ m1.on("connect", () => {
     ),
     { x: 0, y: 1 },
   );
+  page.addButton(
+    createMqttIconStateButton(
+      m1,
+      "sonos",
+      "sonos",
+      "sonos/0/root/172_17_0_85/state",
+      [
+        { icon: ICONS.PAUSE, state: "play" },
+        { icon: ICONS.PLAY, state: "pause" },
+        { icon: ICONS.PLAY, state: "stop" },
+      ],
+      "sonos/0/root/172_17_0_85/state/set",
+    ),
+    { x: 3, y: 0 },
+  );
+  page.addButton(
+    createMqttDimStateButton(
+      m1,
+      "VolUp",
+      "sonos/0/root/172_17_0_85/volume",
+      5,
+      undefined,
+      "sonos/0/root/172_17_0_85/volume/set",
+      ICONS.VOLUME_UP,
+    ),
+    { x: 3, y: 1 },
+  );
+  page.addButton(
+    createMqttDimStateButton(
+      m1,
+      "VolDown",
+      "sonos/0/root/172_17_0_85/volume",
+      -5,
+      undefined,
+      "sonos/0/root/172_17_0_85/volume/set",
+      ICONS.VOLUME_DOWN,
+    ),
+    { x: 4, y: 1 },
+  );
+  page
+    .addButton(new SimpleButton("Skip", new IconLabel(ICONS.NEXT)), {
+      x: 4,
+      y: 0,
+    })
+    .on("keyClick", () => {
+      m1.publish("sonos/0/root/172_17_0_85/next/set", "true");
+    });
 });
 
 // ---------------------------
