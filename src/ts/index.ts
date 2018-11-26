@@ -221,7 +221,7 @@ m1.on("connect", () => {
       "sonos/0/root/172_17_0_85/volume/set",
       ICONS.VOLUME_UP,
     ),
-    { x: 3, y: 1 },
+    { x: 4, y: 1 },
   );
   page.addButton(
     createMqttDimStateButton(
@@ -233,7 +233,7 @@ m1.on("connect", () => {
       "sonos/0/root/172_17_0_85/volume/set",
       ICONS.VOLUME_DOWN,
     ),
-    { x: 4, y: 1 },
+    { x: 3, y: 1 },
   );
   page
     .addButton(new SimpleButton("Skip", new IconLabel(ICONS.NEXT)), {
