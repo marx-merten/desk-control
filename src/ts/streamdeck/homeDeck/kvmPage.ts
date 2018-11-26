@@ -67,6 +67,14 @@ export class KVMPage extends SubMenu {
     });
   }
 
+  public createKvm(): KvmConnector {
+    return new KvmConnector(
+      DeckConfig.kvmHost,
+      DeckConfig.kvmUser,
+      DeckConfig.kvmPassword,
+    );
+  }
+
   private async updateCurrentState() {
     // Reset all input buttons, need a better aproach for this
     if (this.shouldConnect()) {
@@ -76,8 +84,12 @@ export class KVMPage extends SubMenu {
         kvm.addCommand(
           "RO 0" + out,
           (res) => {
-            const inNr = Number(res![1]);
-            this.currentInputs[index] = inNr;
+            try {
+              const inNr = Number(res![1]);
+              this.currentInputs[index] = inNr;
+            } catch (e) {
+              this.currentInputs[index] = -1;
+            }
           },
           KVM_RO_RESULT,
         );
@@ -119,11 +131,11 @@ export class KVMPage extends SubMenu {
     const input = this.currentInputs[index];
     switch (this.currentState) {
       case State.normal:
-        b.lbl.txt = input.toString();
+        b.lbl.txt = input === -1 ? "X" : input.toString();
         b.lbl.background = DeckConfig.colDefault;
         break;
       case State.selected:
-        b.lbl.txt = input.toString();
+        b.lbl.txt = input === -1 ? "X" : input.toString();
         b.lbl.background =
           index === this.selectedOutputIndex
             ? DeckConfig.colDefaultActive
@@ -228,12 +240,5 @@ export class KVMPage extends SubMenu {
     store.push(i);
     this.addButton(p, { x: xpos, y: ypos });
     return i;
-  }
-  private createKvm(): KvmConnector {
-    return new KvmConnector(
-      DeckConfig.kvmHost,
-      DeckConfig.kvmUser,
-      DeckConfig.kvmPassword,
-    );
   }
 }
