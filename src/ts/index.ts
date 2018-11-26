@@ -1,13 +1,20 @@
 import { Color, get as colorGet, to as colorTo } from "color-string";
+import { connect as mqttConnect } from "mqtt";
 import { DeckConfig } from "./deckConfig";
 import { main as demoMain } from "./sample/sample1";
 import { DeckStack, KEY_CLICK } from "./streamdeck/deckStack";
 import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
 import { KVMPage } from "./streamdeck/homeDeck/kvmPage";
 import { ICONS } from "./streamdeck/page/logos";
+import { MqttLabel } from "./streamdeck/page/mqttLabel";
 import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { SubMenu } from "./streamdeck/page/submenueDeckPage";
+
+import {
+  createMqttIconStateButton,
+  createMqttPowerStateButton,
+} from "./streamdeck/homeDeck/buttonTemplates";
 import {
   CharacterLabel,
   IconLabel,
@@ -64,7 +71,7 @@ favs
 
 favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
-    x: 0,
+    x: 1,
     y: 1,
   })
   .on(KEY_CLICK, () => {
@@ -79,13 +86,116 @@ deck.addPage(favs);
 page
   .addButton(
     new SimpleButton("favs", new IconLabel(ICONS.FOLDER, "favorite")),
-    { x: 4, y: 0 },
+    { x: 0, y: 0 },
   )
   .jumpOnClick("FAVS");
 
 // ---------------------------
 //    MainButtons
 // ---------------------------
+// ------------------------------
+//  Setup mqtt relevant elements
+// ------------------------------
+const m1 = mqttConnect("mqtt://nas:9883");
+m1.on("connect", () => {
+  // tslint:disable-next-line:no-console
+  console.log("Connected MQTT");
+
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
+      "Light",
+      "HO",
+      "hm-rpc/1/000858A994DA3B/4/STATE",
+      "hm-rpc/1/000858A994DA3B/4/STATE/set",
+    ),
+    {
+      x: 0,
+      y: 2,
+    },
+  );
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
+      "DeskLight",
+      "Desk",
+      "hm-rpc/1/0001D8A9933FDD/3/STATE",
+      "hm-rpc/1/0001D8A9933FDD/3/STATE/set",
+    ),
+    {
+      x: 1,
+      y: 2,
+    },
+  );
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
+      "MMini",
+      "Mac",
+      "hm-rpc/1/0001D8A9933E33/3/STATE",
+      "hm-rpc/1/0001D8A9933E33/3/STATE/set",
+      ICONS.DB,
+    ),
+    {
+      x: 2,
+      y: 2,
+    },
+  );
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
+      "EDesk",
+      "Elektro",
+      "hm-rpc/1/0001D8A9933F8D/3/STATE",
+      "hm-rpc/1/0001D8A9933F8D/3/STATE/set",
+      ICONS.SW_ON,
+      ICONS.SW_OFF,
+    ),
+    {
+      x: 3,
+      y: 2,
+    },
+  );
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
+      "EDesk",
+      "Desk",
+      "hm-rpc/1/0001D8A9933F93/3/STATE",
+      "hm-rpc/1/0001D8A9933F93/3/STATE/set",
+      ICONS.SW_ON,
+      ICONS.SW_OFF,
+    ),
+    {
+      x: 4,
+      y: 2,
+    },
+  );
+
+  page.addButton(
+    createMqttIconStateButton(
+      m1,
+      "rollade",
+      "rollo",
+      "hm-rpc/0/OEQ1850720/1/LEVEL",
+      [
+        {
+          icon: "./src/res/homeAutomation/blindClose.png",
+          lbl: "Fenster",
+          state: "0",
+        },
+        {
+          icon: "./src/res/homeAutomation/blindOpen.png",
+          lbl: "Fenster",
+          state: "100",
+        },
+      ],
+      "hm-rpc/0/OEQ1850720/1/LEVEL/set",
+      "hm-rpc/0/OEQ1850720/1/WORKING",
+    ),
+    { x: 0, y: 1 },
+  );
+});
 
 // ---------------------------
 //    Logging cache success
