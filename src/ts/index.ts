@@ -11,7 +11,10 @@ import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 
-import { createMqttStateButton } from "./streamdeck/homeDeck/buttonTemplates";
+import {
+  createMqttIconStateButton,
+  createMqttPowerStateButton,
+} from "./streamdeck/homeDeck/buttonTemplates";
 import {
   CharacterLabel,
   IconLabel,
@@ -94,12 +97,27 @@ const m1 = mqttConnect("mqtt://nas:9883");
 m1.on("connect", () => {
   // tslint:disable-next-line:no-console
   console.log("Connected MQTT");
+
   page.addButton(
-    createMqttStateButton(
+    createMqttPowerStateButton(
+      m1,
+      "Light",
+      "HO",
+      "hm-rpc/1/000858A994DA3B/4/STATE",
+      "hm-rpc/1/000858A994DA3B/4/STATE/set",
+    ),
+    {
+      x: 0,
+      y: 2,
+    },
+  );
+  page.addButton(
+    createMqttPowerStateButton(
       m1,
       "DeskLight",
       "Desk",
       "hm-rpc/1/0001D8A9933FDD/3/STATE",
+      "hm-rpc/1/0001D8A9933FDD/3/STATE/set",
     ),
     {
       x: 1,
@@ -107,19 +125,26 @@ m1.on("connect", () => {
     },
   );
   page.addButton(
-    createMqttStateButton(m1, "Light", "HO", "hm-rpc/1/000858A994DA3B/4/STATE"),
+    createMqttPowerStateButton(
+      m1,
+      "MMini",
+      "Mac",
+      "hm-rpc/1/0001D8A9933E33/3/STATE",
+      "hm-rpc/1/0001D8A9933E33/3/STATE/set",
+      ICONS.DB,
+    ),
     {
-      x: 0,
+      x: 2,
       y: 2,
     },
   );
   page.addButton(
-    createMqttStateButton(
+    createMqttPowerStateButton(
       m1,
       "EDesk",
       "Elektro",
       "hm-rpc/1/0001D8A9933F8D/3/STATE",
-      "hm-rpc/1/0001D8A9933F8D/3/STATE",
+      "hm-rpc/1/0001D8A9933F8D/3/STATE/set",
       ICONS.SW_ON,
       ICONS.SW_OFF,
     ),
@@ -129,12 +154,12 @@ m1.on("connect", () => {
     },
   );
   page.addButton(
-    createMqttStateButton(
+    createMqttPowerStateButton(
       m1,
       "EDesk",
       "Desk",
       "hm-rpc/1/0001D8A9933F93/3/STATE",
-      "hm-rpc/1/0001D8A9933F93/3/STATE",
+      "hm-rpc/1/0001D8A9933F93/3/STATE/set",
       ICONS.SW_ON,
       ICONS.SW_OFF,
     ),
@@ -142,6 +167,30 @@ m1.on("connect", () => {
       x: 4,
       y: 2,
     },
+  );
+
+  page.addButton(
+    createMqttIconStateButton(
+      m1,
+      "rollade",
+      "rollo",
+      "hm-rpc/0/OEQ1850720/1/LEVEL",
+      [
+        {
+          icon: "./src/res/homeAutomation/blindClose.png",
+          lbl: "Fenster",
+          state: "0",
+        },
+        {
+          icon: "./src/res/homeAutomation/blindOpen.png",
+          lbl: "Fenster",
+          state: "100",
+        },
+      ],
+      "hm-rpc/0/OEQ1850720/1/LEVEL/set",
+      "hm-rpc/0/OEQ1850720/1/WORKING",
+    ),
+    { x: 0, y: 1 },
   );
 });
 

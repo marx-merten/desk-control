@@ -37,7 +37,7 @@ export class ColorLabel extends DeckButtonLabel {
 
 export class StateSwitchLabel extends DeckButtonLabel {
   public defaultLabel?: { state: string; label: DeckButtonLabel };
-  private states: Map<string, DeckButtonLabel> = new Map();
+  public states: Map<string, DeckButtonLabel> = new Map();
   private currentState?: { state: string; label: DeckButtonLabel };
 
   get state(): string | undefined {
