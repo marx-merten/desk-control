@@ -215,6 +215,11 @@ export class IconLabel extends SvgLabel {
     this.icon = iconPath;
   }
   public prepareSvg(svg: string): string {
+    if (this.label !== "") {
+      this.svgTemplate = ICON_TEMPLATE_LABEL;
+    } else {
+      this.svgTemplate = ICON_TEMPLATE;
+    }
     let svgResult = super.prepareSvg(svg);
     const iconBase64 = this.loadIcon(this.icon);
     svgResult = svgResult

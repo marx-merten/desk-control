@@ -32,6 +32,7 @@
     "color-string": "^1.5.3",
     "elgato-stream-deck": "^2.1.1",
     "expect-telnet": "^1.0.0",
+    "moment": "^2.22.2",
     "mqtt": "^2.18.8",
     "ts-md5": "^1.2.4"
   },

@@ -1,4 +1,5 @@
 import { Color, get as colorGet, to as colorTo } from "color-string";
+import moment from "moment";
 import { connect as mqttConnect } from "mqtt";
 import { DeckConfig } from "./deckConfig";
 import { main as demoMain } from "./sample/sample1";
@@ -244,6 +245,20 @@ m1.on("connect", () => {
       m1.publish("sonos/0/root/172_17_0_85/next/set", "true");
     });
 });
+
+// ----------------------
+//    Timing and Clock
+// ----------------------
+const clock = new IconLabel(ICONS.CAL, moment().format("HH:mm"));
+const clockBtn = new SimpleButton("clock", clock);
+page.addButton(clockBtn, {
+  x: 2,
+  y: 0,
+});
+setInterval(() => {
+  clock.label = moment().format("HH:mm");
+  clockBtn.markDirty();
+}, 20000);
 
 // ---------------------------
 //    Logging cache success

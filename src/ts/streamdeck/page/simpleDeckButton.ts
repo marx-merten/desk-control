@@ -18,6 +18,10 @@ export class SimpleButton extends DeckButton {
     this.name = name;
   }
 
+  public draw(): void {
+    // console.log("DRAW:" + this.name);
+    super.draw();
+  }
   get state(): string {
     return this.name;
   }
