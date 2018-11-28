@@ -285,6 +285,7 @@ function logPrecache() {
 //   Try Global Catch --- may fix crashes
 // ---------------------------------------
 process.on("uncaughtException", (err) => {
+  console.error("-------- Node NOT Exiting...");
   console.error(err.stack);
-  console.log("Node NOT Exiting...");
+  console.log("-------- Node NOT Exiting...");
 });
