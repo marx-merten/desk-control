@@ -257,11 +257,22 @@ page.addButton(clockBtn, {
   x: 2,
   y: 0,
 });
-setInterval(() => {
+
+let timerI = setInterval(() => {
   clock.label = moment().format("HH:mm");
   clockBtn.markDirty();
 }, 20000);
 
+clockBtn.on("keyClick", () => {
+  clearInterval(timerI);
+  timerI = setInterval(() => {
+    clock.label = moment().format("HH:mm");
+    clockBtn.markDirty();
+  }, 20000);
+
+  clock.label = moment().format("HH:mm");
+  clockBtn.markDirty();
+});
 // ---------------------------
 //    Logging cache success
 // ---------------------------
