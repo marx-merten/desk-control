@@ -13,7 +13,6 @@ export const KEY_UP = "keyUp";
 export const KEY_CLICK = "keyClick";
 
 export class DeckStack {
-  private drawRetry: number = 0;
   get currentFrame(): IDeckPage {
     if (this.currentStack.length < 1) {
       throw new Error("No Pages defined");
@@ -24,6 +23,7 @@ export class DeckStack {
   public deck: StreamDeckWrapper;
   public mainPage?: IDeckPage;
   public pages: { [id: string]: IDeckPage } = {};
+  private drawRetry: number = 0;
 
   private currentStack: IDeckPage[] = [];
   private buttonTimings = new Array<number>(DeckConfig.numberOfButtons);
@@ -142,19 +142,19 @@ export class DeckStack {
   }
 
   private redrawFull() {
-   try {
+    try {
       // clear Deck and redraw using all fields and current stack page.
-    this.deck.clearAllKeys();
-    this.currentFrame.activate(this.deck);
-  } catch (e) {
-    // tslint:disable-next-line:no-console
-    console.log("Error cached, retry " + this.drawRetry++);
-    if (this.drawRetry <= 10) {
-      setTimeout(() => {
-        this.redrawFull());
-      }, 200);
+      this.deck.clearAllKeys();
+      this.currentFrame.activate(this.deck);
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.log("Error cached, retry " + this.drawRetry++);
+      if (this.drawRetry <= 10) {
+        setTimeout(() => {
+          this.redrawFull();
+        }, 200);
+      }
     }
-  }
   }
 }
 
