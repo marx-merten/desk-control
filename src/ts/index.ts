@@ -1,3 +1,5 @@
+// tslint:disable:no-console
+
 import { Color, get as colorGet, to as colorTo } from "color-string";
 import moment from "moment";
 import { connect as mqttConnect } from "mqtt";
@@ -278,3 +280,11 @@ function logPrecache() {
     clearInterval(logger);
   }
 }
+
+// ---------------------------------------
+//   Try Global Catch --- may fix crashes
+// ---------------------------------------
+process.on("uncaughtException", (err) => {
+  console.error(err.stack);
+  console.log("Node NOT Exiting...");
+});
