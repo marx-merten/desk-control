@@ -101,6 +101,8 @@ page
 //  Setup mqtt relevant elements
 // ------------------------------
 const m1 = mqttConnect("mqtt://nas:9883");
+m1.setMaxListeners(200);
+
 m1.on("connect", () => {
   // tslint:disable-next-line:no-console
   console.log("Connected MQTT");

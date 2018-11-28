@@ -91,6 +91,7 @@ export class SvgLabel extends DeckButtonLabel {
   public background = colorGet("lightsteelblue")!.value;
 
   public svgTemplate: string;
+  public drawRetry: number = 0;
 
   constructor(template = BASIC_TEMPLATE) {
     super();
@@ -146,20 +147,31 @@ export class SvgLabel extends DeckButtonLabel {
   }
 
   public draw(key: StreamKeyWrapper): void {
-    const svgSrc = this.prepareSvg(this.svgTemplate);
-    if (SvgLabel.cache.isCached(svgSrc)) {
-      const buffer = SvgLabel.cache.retrieve(svgSrc)!;
-      key.fillImage(buffer);
-    } else {
-      const im = sharp(Buffer.from(svgSrc));
-      im.resize(DeckConfig.ICON_SIZE, DeckConfig.ICON_SIZE)
-        .flatten()
-        .raw()
-        .toBuffer()
-        .then((buffer: any) => {
-          SvgLabel.cache.cacheImage(svgSrc, buffer);
-          return key.fillImage(buffer);
-        });
+    try {
+      const svgSrc = this.prepareSvg(this.svgTemplate);
+      if (SvgLabel.cache.isCached(svgSrc)) {
+        const buffer = SvgLabel.cache.retrieve(svgSrc)!;
+        key.fillImage(buffer);
+      } else {
+        const im = sharp(Buffer.from(svgSrc));
+        im.resize(DeckConfig.ICON_SIZE, DeckConfig.ICON_SIZE)
+          .flatten()
+          .raw()
+          .toBuffer()
+          .then((buffer: any) => {
+            SvgLabel.cache.cacheImage(svgSrc, buffer);
+            return key.fillImage(buffer);
+          });
+        this.drawRetry = 0;
+      }
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.log("Error cached, retry " + this.drawRetry++);
+      if (this.drawRetry <= 10) {
+        setTimeout(() => {
+          this.draw(key);
+        }, 200);
+      }
     }
   }
 }
