@@ -210,7 +210,7 @@ m1.on("connect", () => {
       ],
       "sonos/0/root/172_17_0_85/state/set",
     ),
-    { x: 3, y: 0 },
+    { x: 3, y: 2 },
   );
   page.addButton(
     createMqttDimStateButton(
@@ -239,7 +239,7 @@ m1.on("connect", () => {
   page
     .addButton(new SimpleButton("Skip", new IconLabel(ICONS.NEXT)), {
       x: 4,
-      y: 0,
+      y: 2,
     })
     .on("keyClick", () => {
       m1.publish("sonos/0/root/172_17_0_85/next/set", "true");
