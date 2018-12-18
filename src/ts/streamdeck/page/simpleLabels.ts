@@ -55,13 +55,17 @@ export class StateSwitchLabel extends DeckButtonLabel {
       this.currentState = this.defaultLabel;
     }
     if (this.button !== undefined) {
-      this.button.markDirty();
+      if (this.button.active) {
+        this.button.markDirty();
+      }
     }
   }
   set default(lbl: DeckButtonLabel) {
     this.defaultLabel = { state: "___UNDEFINED___", label: lbl };
     if (this.button !== undefined) {
-      this.button.markDirty();
+      if (this.button.active) {
+        this.button.markDirty();
+      }
     }
     this.currentState = this.defaultLabel;
   }
