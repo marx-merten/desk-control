@@ -87,7 +87,7 @@ favs
   });
 
 deck.addPage(favs);
-page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 0, y: 0 }).jumpOnClick("FAVS");
+page.addButton(new SimpleButton("kvm", new IconLabel(ICONS.FOLDER, "kvm")), { x: 0, y: 0 }).jumpOnClick("FAVS");
 
 // ---------------------------
 // Sonos and Audio
@@ -96,7 +96,7 @@ page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), 
 const audio = new SubMenu("AUDIO", deck);
 
 deck.addPage(audio);
-page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "favorite")), { x: 4, y: 0 }).jumpOnClick("AUDIO");
+page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 4, y: 0 }).jumpOnClick("AUDIO");
 
 // ---------------------------
 //    MainButtons
