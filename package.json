@@ -1,6 +1,6 @@
 {
   "name": "streamdesk",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A specific HomeDesk installation to use the streamdeck device in my home office setup.",
   "main": "main.js",
   "author": "stefan@codingfragments.org",
@@ -34,7 +34,8 @@
     "expect-telnet": "^1.0.0",
     "moment": "^2.22.2",
     "mqtt": "^2.18.8",
-    "ts-md5": "^1.2.4"
+    "ts-md5": "^1.2.4",
+    "yarn": "^1.12.3"
   },
   "bin": {
     "marxDesk": "main.js"
