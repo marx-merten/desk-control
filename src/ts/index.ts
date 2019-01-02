@@ -61,13 +61,13 @@ favs
   });
 
 favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "main")), {
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "dual")), {
     x: 1,
     y: 0,
   })
   .on(KEY_CLICK, () => {
     const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 01");
+    kvmApi.addCommand("LO 03");
     kvmApi.execute(() => {
       //
     });
@@ -80,14 +80,14 @@ favs
   })
   .on(KEY_CLICK, () => {
     const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 03");
+    kvmApi.addCommand("LO 02");
     kvmApi.execute(() => {
       //
     });
   });
 
 deck.addPage(favs);
-page.addButton(new SimpleButton("favs", new IconLabel(ICONS.FOLDER, "favorite")), { x: 0, y: 0 }).jumpOnClick("FAVS");
+page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 0, y: 0 }).jumpOnClick("FAVS");
 
 // ---------------------------
 // Sonos and Audio
@@ -256,8 +256,8 @@ m1.on("connect", () => {
 const clock = new IconLabel(ICONS.CAL, moment().format("HH:mm"));
 const clockBtn = new SimpleButton("clock", clock);
 page.addButton(clockBtn, {
-  x: 2,
-  y: 0,
+  x: 4,
+  y: 2,
 });
 
 let timerI = setInterval(() => {
