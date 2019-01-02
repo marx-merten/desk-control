@@ -15,15 +15,8 @@ import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 
-import {
-  createMqttIconStateButton,
-  createMqttPowerStateButton,
-} from "./streamdeck/homeDeck/buttonTemplates";
-import {
-  CharacterLabel,
-  IconLabel,
-  SvgLabel,
-} from "./streamdeck/page/svgLabel";
+import { createMqttIconStateButton, createMqttPowerStateButton } from "./streamdeck/homeDeck/buttonTemplates";
+import { CharacterLabel, IconLabel, SvgLabel } from "./streamdeck/page/svgLabel";
 
 const deck = new DeckStack();
 const page = new SimpleDeckPage("MAIN");
@@ -44,16 +37,10 @@ deck.setMainPage("MAIN");
 const kvm = new KVMPage("kvm", deck);
 deck.addPage(kvm);
 page
-  .addButton(
-    new SimpleButton(
-      "kvm",
-      new IconLabel(ICONS.KVM).setBackground(DeckConfig.colDefault),
-    ),
-    {
-      x: 1,
-      y: 0,
-    },
-  )
+  .addButton(new SimpleButton("kvm", new IconLabel(ICONS.KVM).setBackground(DeckConfig.colDefault)), {
+    x: 1,
+    y: 0,
+  })
   .jumpOnClick("kvm");
 
 // Favs Folder
@@ -74,25 +61,42 @@ favs
   });
 
 favs
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "main")), {
+    x: 1,
+    y: 0,
+  })
+  .on(KEY_CLICK, () => {
+    const kvmApi = kvm.createKvm();
+    kvmApi.addCommand("LO 01");
+    kvmApi.execute(() => {
+      //
+    });
+  });
+
+favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
     x: 0,
     y: 1,
   })
   .on(KEY_CLICK, () => {
     const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 02");
+    kvmApi.addCommand("LO 03");
     kvmApi.execute(() => {
       //
     });
   });
 
 deck.addPage(favs);
-page
-  .addButton(
-    new SimpleButton("favs", new IconLabel(ICONS.FOLDER, "favorite")),
-    { x: 0, y: 0 },
-  )
-  .jumpOnClick("FAVS");
+page.addButton(new SimpleButton("favs", new IconLabel(ICONS.FOLDER, "favorite")), { x: 0, y: 0 }).jumpOnClick("FAVS");
+
+// ---------------------------
+// Sonos and Audio
+// ---------------------------
+
+const audio = new SubMenu("AUDIO", deck);
+
+deck.addPage(audio);
+page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "favorite")), { x: 4, y: 0 }).jumpOnClick("AUDIO");
 
 // ---------------------------
 //    MainButtons
@@ -201,22 +205,18 @@ m1.on("connect", () => {
     ),
     { x: 0, y: 1 },
   );
-  page.addButton(
+  audio.addButton(
     createMqttIconStateButton(
       m1,
       "sonos",
       "sonos",
       "sonos/0/root/172_17_0_85/state",
-      [
-        { icon: ICONS.PAUSE, state: "play" },
-        { icon: ICONS.PLAY, state: "pause" },
-        { icon: ICONS.PLAY, state: "stop" },
-      ],
+      [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
       "sonos/0/root/172_17_0_85/state/set",
     ),
-    { x: 3, y: 2 },
+    { x: 0, y: 1 },
   );
-  page.addButton(
+  audio.addButton(
     createMqttDimStateButton(
       m1,
       "VolUp",
@@ -226,9 +226,9 @@ m1.on("connect", () => {
       "sonos/0/root/172_17_0_85/volume/set",
       ICONS.VOLUME_UP,
     ),
-    { x: 4, y: 1 },
+    { x: 1, y: 0 },
   );
-  page.addButton(
+  audio.addButton(
     createMqttDimStateButton(
       m1,
       "VolDown",
@@ -238,12 +238,12 @@ m1.on("connect", () => {
       "sonos/0/root/172_17_0_85/volume/set",
       ICONS.VOLUME_DOWN,
     ),
-    { x: 3, y: 1 },
+    { x: 0, y: 0 },
   );
-  page
+  audio
     .addButton(new SimpleButton("Skip", new IconLabel(ICONS.NEXT)), {
-      x: 4,
-      y: 2,
+      x: 1,
+      y: 1,
     })
     .on("keyClick", () => {
       m1.publish("sonos/0/root/172_17_0_85/next/set", "true");
