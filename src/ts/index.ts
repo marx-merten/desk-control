@@ -128,7 +128,7 @@ m1.on("connect", () => {
     createMqttPowerStateButton(
       m1,
       "DeskLight",
-      "Desk",
+      "Fluter",
       "hm-rpc/1/0001D8A9933FDD/3/STATE",
       "hm-rpc/1/0001D8A9933FDD/3/STATE/set",
     ),
