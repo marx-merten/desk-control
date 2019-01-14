@@ -96,7 +96,7 @@ page.addButton(new SimpleButton("kvm", new IconLabel(ICONS.FOLDER, "kvm")), { x:
 const audio = new SubMenu("AUDIO", deck);
 
 deck.addPage(audio);
-page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 4, y: 0 }).jumpOnClick("AUDIO");
+page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 4, y: 1 }).jumpOnClick("AUDIO");
 
 // ---------------------------
 //    MainButtons
@@ -128,7 +128,7 @@ m1.on("connect", () => {
     createMqttPowerStateButton(
       m1,
       "DeskLight",
-      "Fluter",
+      "Desk",
       "hm-rpc/1/0001D8A9933FDD/3/STATE",
       "hm-rpc/1/0001D8A9933FDD/3/STATE/set",
     ),
@@ -216,6 +216,19 @@ m1.on("connect", () => {
     ),
     { x: 0, y: 1 },
   );
+
+  //Add Additional Button on main Screen to pause main audio
+  page.addButton(
+    createMqttIconStateButton(
+      m1,
+      "sonos",
+      "sonos",
+      "sonos/0/root/172_17_0_85/state",
+      [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
+      "sonos/0/root/172_17_0_85/state/set",
+    ),
+    { x: 4, y: 2 },
+  );
   audio.addButton(
     createMqttDimStateButton(
       m1,
@@ -257,7 +270,7 @@ const clock = new IconLabel(ICONS.CAL, moment().format("HH:mm"));
 const clockBtn = new SimpleButton("clock", clock);
 page.addButton(clockBtn, {
   x: 4,
-  y: 2,
+  y: 0,
 });
 
 let timerI = setInterval(() => {
