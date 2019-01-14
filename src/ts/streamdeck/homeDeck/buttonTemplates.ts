@@ -19,21 +19,13 @@ export function createMqttIconStateButton(
   color = DeckConfig.colDefault,
 ): IDeckButton {
   const lbl = new MqttLabel(mqtt, topic, activeMoveTopic);
-  lbl.default = new IconLabel(ICONS.WAIT, "wait").setBackground(
-    DeckConfig.colDefaultInactive,
-  );
+  lbl.default = new IconLabel(ICONS.WAIT, "wait").setBackground(DeckConfig.colDefaultInactive);
 
   states.forEach((st) => {
-    lbl.addState(
-      st.state,
-      new IconLabel(st.icon, st.lbl === undefined ? label : st.lbl),
-    );
+    lbl.addState(st.state, new IconLabel(st.icon, st.lbl === undefined ? label : st.lbl));
   });
 
-  lbl.addState(
-    "__active__",
-    new IconLabel(ICONS.WAIT, "...").setBackground(DeckConfig.colDefaultActive),
-  );
+  lbl.addState("__active__", new IconLabel(ICONS.WAIT, "...").setBackground(DeckConfig.colDefaultActive));
   const b = new SimpleButton(name, lbl);
 
   b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
@@ -41,6 +33,7 @@ export function createMqttIconStateButton(
 
     for (const st of lbl.states.keys()) {
       if (s !== st) {
+        lbl.state = "__active__";
         mqtt.publish(setTopic, st);
         break;
       }
@@ -59,18 +52,9 @@ export function createMqttPowerStateButton(
 ): IDeckButton {
   const lbl = new MqttLabel(mqqt, topic);
   lbl
-    .addState(
-      "___UNDEFINED___",
-      new IconLabel(icon, location).setBackground(DeckConfig.colDefaultInactive),
-    )
-    .addState(
-      "false",
-      new IconLabel(iconOff, location).setBackground(DeckConfig.colDefaultFalse),
-    )
-    .addState(
-      "true",
-      new IconLabel(icon, location).setBackground(DeckConfig.colDefaultTrue),
-    );
+    .addState("___UNDEFINED___", new IconLabel(icon, location).setBackground(DeckConfig.colDefaultInactive))
+    .addState("false", new IconLabel(iconOff, location).setBackground(DeckConfig.colDefaultFalse))
+    .addState("true", new IconLabel(icon, location).setBackground(DeckConfig.colDefaultTrue));
 
   const b = new SimpleButton(name, lbl);
   b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
