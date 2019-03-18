@@ -124,6 +124,10 @@ m1.on("connect", () => {
       y: 2,
     },
   );
+  page.addButton(createMqttPowerStateButton(m1, "Light", "XX", "test/1", "test/1/set"), {
+    x: 3,
+    y: 2,
+  });
   page.addButton(
     createMqttPowerStateButton(
       m1,
@@ -217,7 +221,7 @@ m1.on("connect", () => {
     { x: 0, y: 1 },
   );
 
-  //Add Additional Button on main Screen to pause main audio
+  // Add Additional Button on main Screen to pause main audio
   page.addButton(
     createMqttIconStateButton(
       m1,
