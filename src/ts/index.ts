@@ -74,6 +74,19 @@ favs
   });
 
 favs
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "game")), {
+    x: 1,
+    y: 1,
+  })
+  .on(KEY_CLICK, () => {
+    const kvmApi = kvm.createKvm();
+    kvmApi.addCommand("LO 04");
+    kvmApi.execute(() => {
+      //
+    });
+  });
+
+favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
     x: 0,
     y: 1,
@@ -107,10 +120,15 @@ page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), 
 const m1 = mqttConnect("mqtt://nas:9883");
 m1.setMaxListeners(200);
 
+let connectOnce = false;
+
 m1.on("connect", () => {
   // tslint:disable-next-line:no-console
   console.log("Connected MQTT");
-
+  if (connectOnce) {
+    console.log("Reconnect requested, ignore adding buttons");
+    return;
+  }
   page.addButton(
     createMqttPowerStateButton(
       m1,
@@ -265,6 +283,8 @@ m1.on("connect", () => {
     .on("keyClick", () => {
       m1.publish("sonos/0/root/172_17_0_85/next/set", "true");
     });
+
+  connectOnce = true;
 });
 
 // ----------------------
