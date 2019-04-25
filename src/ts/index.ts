@@ -61,7 +61,7 @@ favs
   });
 
 favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "dual")), {
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "work")), {
     x: 1,
     y: 0,
   })
@@ -142,10 +142,6 @@ m1.on("connect", () => {
       y: 2,
     },
   );
-  page.addButton(createMqttPowerStateButton(m1, "Light", "XX", "test/1", "test/1/set"), {
-    x: 3,
-    y: 2,
-  });
   page.addButton(
     createMqttPowerStateButton(
       m1,
