@@ -87,6 +87,19 @@ favs
   });
 
 favs
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "game only")), {
+    x: 1,
+    y: 2,
+  })
+  .on(KEY_CLICK, () => {
+    const kvmApi = kvm.createKvm();
+    kvmApi.addCommand("LO 05");
+    kvmApi.execute(() => {
+      //
+    });
+  });
+
+favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
     x: 0,
     y: 1,
