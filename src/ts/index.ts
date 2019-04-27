@@ -100,6 +100,19 @@ favs
   });
 
 favs
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.POWER, "STBY")), {
+    x: 4,
+    y: 0,
+  })
+  .on(KEY_CLICK, () => {
+    const kvmApi = kvm.createKvm();
+    kvmApi.addCommand("LO 06");
+    kvmApi.execute(() => {
+      //
+    });
+  });
+
+favs
   .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
     x: 0,
     y: 1,
