@@ -87,6 +87,7 @@ const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export class SvgLabel extends DeckButtonLabel {
   public static precacheInFlight: Set<string> = new Set();
   private static cache = new SVGCache();
+  public enableCache = true;
   public color = colorGet("black")!.value;
   public background = colorGet("lightsteelblue")!.value;
 
@@ -121,6 +122,7 @@ export class SvgLabel extends DeckButtonLabel {
   }
 
   public precache(): any {
+    if (!this.enableCache) return;
     const svgSrc = this.prepareSvg(this.svgTemplate);
     if (!SvgLabel.cache.isCached(svgSrc)) {
       const im = sharp(Buffer.from(svgSrc));
@@ -131,8 +133,11 @@ export class SvgLabel extends DeckButtonLabel {
         .raw()
         .toBuffer()
         .then((buffer: any) => {
-          SvgLabel.cache.cacheImage(svgSrc, buffer);
-          SvgLabel.precacheInFlight.delete(svgSrc);
+          if (this.enableCache) {
+
+            SvgLabel.cache.cacheImage(svgSrc, buffer);
+            SvgLabel.precacheInFlight.delete(svgSrc);
+          }
         })
         .catch((reason) => {
           SvgLabel.precacheInFlight.delete(svgSrc);
@@ -159,7 +164,9 @@ export class SvgLabel extends DeckButtonLabel {
           .raw()
           .toBuffer()
           .then((buffer: any) => {
-            SvgLabel.cache.cacheImage(svgSrc, buffer);
+            if (this.enableCache) {
+              SvgLabel.cache.cacheImage(svgSrc, buffer);
+            }
             return key.fillImage(buffer);
           });
         this.drawRetry = 0;

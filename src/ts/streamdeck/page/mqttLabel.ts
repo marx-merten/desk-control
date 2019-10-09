@@ -1,5 +1,8 @@
 import { MqttClient } from "mqtt";
 import { StateSwitchLabel } from "./simpleLabels";
+import { DeckButtonLabel } from "../deckButtonLabel";
+import { StreamKeyWrapper } from "../deckWrapper";
+import { DeckButton } from "../deckButton";
 
 export class MqttLabel extends StateSwitchLabel {
   public mqtt: MqttClient;
@@ -33,4 +36,36 @@ export class MqttLabel extends StateSwitchLabel {
       }
     });
   }
+}
+
+export class MqttCallbackLabel extends DeckButtonLabel {
+
+  mqtt: MqttClient;
+  public activeLabel: DeckButtonLabel;
+  stateTopic: string;
+  public callbackFunction: (topic: any, content: any) => boolean;
+
+  constructor(mqtt: MqttClient, stateTopic: string, activeLabel: DeckButtonLabel, callbackFunction: (topic: any, content: any) => boolean) {
+    super();
+    this.mqtt = mqtt;
+    this.stateTopic = stateTopic;
+    this.activeLabel = activeLabel;
+    this.callbackFunction = callbackFunction;
+    mqtt.subscribe(stateTopic);
+    if (stateTopic !== undefined) { mqtt.subscribe(stateTopic); }
+    mqtt.on("message", (topic, payload) => {
+      if (this.callbackFunction(topic, payload)) {
+        if (this.button !== undefined) {
+          if (this.button.active) {
+            this.button.markDirty();
+          }
+        }
+      }
+    })
+  }
+
+  public draw(key: StreamKeyWrapper): void {
+    this.activeLabel.draw(key);
+  }
+
 }
