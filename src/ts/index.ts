@@ -15,8 +15,10 @@ import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 
+
 import { createMqttIconStateButton, createMqttPowerStateButton } from "./streamdeck/homeDeck/buttonTemplates";
 import { CharacterLabel, IconLabel, SvgLabel } from "./streamdeck/page/svgLabel";
+import { exec } from "child_process";
 
 const deck = new DeckStack();
 const page = new SimpleDeckPage("MAIN");
@@ -173,6 +175,13 @@ m2.on("connect", () => {
     return true;
   })
   page.addButton(new SimpleButton("activeConsole", mqttKvm), { x: 4, y: 0 })
+    .on(KEY_CLICK, () => {
+      lblKvm.txt = "-";
+      mqttKvm.markDirty();
+      exec('sudo systemctl restart kvm.service', (err, stdout, stderr) => {
+        // your callback
+      });
+    });
 
   // finally
   connectOnce2 = true;
