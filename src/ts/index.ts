@@ -10,7 +10,7 @@ import { StreamKeyWrapper } from "./streamdeck/deckWrapper";
 import { createMqttDimStateButton } from "./streamdeck/homeDeck/buttonTemplates";
 import { KVMPage } from "./streamdeck/homeDeck/kvmPage";
 import { ICONS } from "./streamdeck/page/logos";
-import { MqttLabel } from "./streamdeck/page/mqttLabel";
+import { MqttLabel, MqttCallbackLabel } from "./streamdeck/page/mqttLabel";
 import { SimpleButton } from "./streamdeck/page/simpleDeckButton";
 import { SimpleDeckPage } from "./streamdeck/page/simpleDeckPage";
 import { SubMenu } from "./streamdeck/page/submenueDeckPage";
@@ -146,7 +146,37 @@ page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), 
 const m1 = mqttConnect("mqtt://nas:9883");
 m1.setMaxListeners(200);
 
+const m2 = mqttConnect("mqtt://nas:1883");
+m2.setMaxListeners(200);
+
+
 let connectOnce = false;
+
+let connectOnce2 = false;
+
+// Add plain mqqt channel for synergy status
+m2.on("connect", () => {
+  console.log("Connected MQTT-plain");
+
+  // page.addButton(
+  //   new SimpleButton("activeConsole", new CharacterLabel("test", "lab", true));
+  // );
+
+  let lblKvm = new CharacterLabel("test", "lab", true)
+  lblKvm.enableCache = false;
+  lblKvm.setBackground(colorGet("lavender")!.value);
+  let mqttKvm = new MqttCallbackLabel(m2, "/homeoffice/desk/kvm/target", lblKvm, (topic, content) => {
+    let cstr: string = content.toString();
+    lblKvm.txt = cstr.substring(0, 1).toUpperCase();
+    lblKvm.label = cstr.substring(0, 7);
+
+    return true;
+  })
+  page.addButton(new SimpleButton("activeConsole", mqttKvm), { x: 4, y: 0 })
+
+  // finally
+  connectOnce2 = true;
+});
 
 m1.on("connect", () => {
   // tslint:disable-next-line:no-console
@@ -312,28 +342,31 @@ m1.on("connect", () => {
 // ----------------------
 //    Timing and Clock
 // ----------------------
-const clock = new IconLabel(ICONS.CAL, moment().format("HH:mm"));
-const clockBtn = new SimpleButton("clock", clock);
-page.addButton(clockBtn, {
-  x: 4,
-  y: 0,
-});
+// const clock = new IconLabel(ICONS.CAL, moment().format("HH:mm"));
+// clock.enableCache = false;
+// const clockBtn = new SimpleButton("clock", clock);
+// page.addButton(clockBtn, {
+//   x: 3,
+//   y: 0,
+// });
 
-let timerI = setInterval(() => {
-  clock.label = moment().format("HH:mm");
-  clockBtn.markDirty();
-}, 20000);
+// let timerI = setInterval(() => {
+//   clock.label = moment().format("HH:mm");
+//   clockBtn.markDirty();
+// }, 10000);
 
-clockBtn.on("keyClick", () => {
-  clearInterval(timerI);
-  timerI = setInterval(() => {
-    clock.label = moment().format("HH:mm");
-    clockBtn.markDirty();
-  }, 20000);
+// clockBtn.on("keyClick", () => {
+//   clearInterval(timerI);
+//   timerI = setInterval(() => {
+//     clock.label = moment().format("HH:mm");
+//     clockBtn.markDirty();
+//   }, 10000);
 
-  clock.label = moment().format("HH:mm");
-  clockBtn.markDirty();
-});
+//   clock.label = moment().format("HH:mm");
+//   clockBtn.markDirty();
+// });
+
+
 // ---------------------------
 //    Logging cache success
 // ---------------------------
