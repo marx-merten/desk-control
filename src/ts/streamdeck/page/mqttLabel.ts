@@ -39,6 +39,13 @@ export class MqttLabel extends StateSwitchLabel {
 }
 
 export class MqttCallbackLabel extends DeckButtonLabel {
+  markDirty() {
+    if (this.button !== undefined) {
+      if (this.button.active) {
+        this.button.markDirty();
+      }
+    }
+  }
 
   mqtt: MqttClient;
   public activeLabel: DeckButtonLabel;
@@ -55,11 +62,7 @@ export class MqttCallbackLabel extends DeckButtonLabel {
     if (stateTopic !== undefined) { mqtt.subscribe(stateTopic); }
     mqtt.on("message", (topic, payload) => {
       if (this.callbackFunction(topic, payload)) {
-        if (this.button !== undefined) {
-          if (this.button.active) {
-            this.button.markDirty();
-          }
-        }
+        this.markDirty();
       }
     })
   }
