@@ -310,7 +310,7 @@ m1.on("connect", () => {
       [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
       "sonos/0/root/172_17_0_85/state/set",
     ),
-    { x: 4, y: 2 },
+    { x: 3, y: 2 },
   );
   audio.addButton(
     createMqttDimStateButton(
