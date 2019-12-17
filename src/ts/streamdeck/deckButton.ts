@@ -34,6 +34,7 @@ export class DeckButton extends EventEmitter implements IDeckButton {
   public page?: IDeckPage;
   public deckKey?: StreamKeyWrapper;
   private deckLabel: DeckButtonLabel;
+  private dirty = false;
 
   constructor(lbl: DeckButtonLabel) {
     super();
@@ -54,6 +55,7 @@ export class DeckButton extends EventEmitter implements IDeckButton {
 
   public activate(key: StreamKeyWrapper): void {
     this.deckKey = key;
+    if (this.dirty) this.draw();
   }
   public deActivate(): void {
     this.deckKey = undefined;
@@ -68,9 +70,11 @@ export class DeckButton extends EventEmitter implements IDeckButton {
   }
   public draw(): void {
     this.deckLabel.draw(this.deckKey!);
+    this.dirty = false;
   }
 
   public markDirty() {
+    this.dirty = true;
     if (this.active) {
       this.draw();
     }

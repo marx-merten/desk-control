@@ -19,6 +19,8 @@ import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 import { createMqttIconStateButton, createMqttPowerStateButton } from "./streamdeck/homeDeck/buttonTemplates";
 import { CharacterLabel, IconLabel, SvgLabel } from "./streamdeck/page/svgLabel";
 import { exec } from "child_process";
+import { ReturnLastKvmStateButton } from "./streamdeck/homeDeck/returnButton";
+import { createKvmFavs } from "./streamdeck/pages/kvmFavs";
 
 const deck = new DeckStack();
 const page = new SimpleDeckPage("MAIN");
@@ -38,97 +40,33 @@ deck.setMainPage("MAIN");
 // ---------------
 const kvm = new KVMPage("kvm", deck);
 deck.addPage(kvm);
-page
-  .addButton(new SimpleButton("kvm", new IconLabel(ICONS.KVM).setBackground(DeckConfig.colDefault)), {
-    x: 1,
-    y: 0,
-  })
-  .jumpOnClick("kvm");
+
+
+const rtLastKVM = new ReturnLastKvmStateButton("back", { lbl: "Game", mode: "04" }, { lbl: "work", mode: "03" });
 
 // Favs Folder
 // ---------------
-const favs = new SubMenu("FAVS", deck);
+const favs = createKvmFavs(kvm, rtLastKVM, deck);
 
-favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "main")), {
-    x: 0,
-    y: 0,
-  })
+deck.addPage(favs);
+page.addButton(new SimpleButton("kvm", new IconLabel(ICONS.FOLDER, "kvm")), { x: 0, y: 0 }).jumpOnClick("FAVS");
+
+
+page.addButton(rtLastKVM, { x: 1, y: 0 })
   .on(KEY_CLICK, () => {
-    const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 01");
-    kvmApi.execute(() => {
-      //
-    });
+    rtLastKVM.switchToLastMode();
   });
-
-favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "work")), {
-    x: 1,
-    y: 0,
-  })
-  .on(KEY_CLICK, () => {
-    const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 03");
-    kvmApi.execute(() => {
-      //
-    });
-  });
-
-favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "game")), {
-    x: 1,
-    y: 1,
-  })
-  .on(KEY_CLICK, () => {
-    const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 04");
-    kvmApi.execute(() => {
-      //
-    });
-  });
-
-favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "game only")), {
-    x: 1,
-    y: 2,
-  })
-  .on(KEY_CLICK, () => {
-    const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 05");
-    kvmApi.execute(() => {
-      //
-    });
-  });
-
-favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.POWER, "STBY")), {
-    x: 4,
+page
+  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.POWER, "STBY").setBackground(colorGet("lavender")!.value)), {
+    x: 2,
     y: 0,
   })
   .on(KEY_CLICK, () => {
     const kvmApi = kvm.createKvm();
     kvmApi.addCommand("LO 06");
-    kvmApi.execute(() => {
-      //
-    });
+    kvmApi.execute(() => { });
+    rtLastKVM.swapStates();
   });
-
-favs
-  .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "laptop")), {
-    x: 0,
-    y: 1,
-  })
-  .on(KEY_CLICK, () => {
-    const kvmApi = kvm.createKvm();
-    kvmApi.addCommand("LO 02");
-    kvmApi.execute(() => {
-      //
-    });
-  });
-
-deck.addPage(favs);
-page.addButton(new SimpleButton("kvm", new IconLabel(ICONS.FOLDER, "kvm")), { x: 0, y: 0 }).jumpOnClick("FAVS");
 
 // ---------------------------
 // Sonos and Audio
@@ -137,7 +75,7 @@ page.addButton(new SimpleButton("kvm", new IconLabel(ICONS.FOLDER, "kvm")), { x:
 const audio = new SubMenu("AUDIO", deck);
 
 deck.addPage(audio);
-page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 4, y: 1 }).jumpOnClick("AUDIO");
+page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), { x: 4, y: 2 }).jumpOnClick("AUDIO");
 
 // ---------------------------
 //    MainButtons
@@ -145,15 +83,14 @@ page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), 
 // ------------------------------
 //  Setup mqtt relevant elements
 // ------------------------------
-const m1 = mqttConnect("mqtt://nas:9883");
+const m1 = mqttConnect("mqtt://homebroker.local.marx-merten.de:9883");
 m1.setMaxListeners(200);
 
-const m2 = mqttConnect("mqtt://nas:1883");
+const m2 = mqttConnect("mqtt://homebroker.local.marx-merten.de:1883");
 m2.setMaxListeners(200);
 
 
 let connectOnce = false;
-
 let connectOnce2 = false;
 
 // Add plain mqqt channel for synergy status
@@ -164,7 +101,7 @@ m2.on("connect", () => {
   //   new SimpleButton("activeConsole", new CharacterLabel("test", "lab", true));
   // );
 
-  let lblKvm = new CharacterLabel("test", "lab", true)
+  let lblKvm = new CharacterLabel("test", "lab", true, false)
   lblKvm.enableCache = false;
   lblKvm.setBackground(colorGet("lavender")!.value);
   let mqttKvm = new MqttCallbackLabel(m2, "/homeoffice/desk/kvm/target", lblKvm, (topic, content) => {
@@ -174,14 +111,31 @@ m2.on("connect", () => {
 
     return true;
   })
-  page.addButton(new SimpleButton("activeConsole", mqttKvm), { x: 4, y: 0 })
+
+
+  // ----------------------
+  //   SOME BASIC HACKS
+  // ----------------------
+
+  let hacks = new SubMenu("HACKS", deck);
+  hacks.addButton(new SimpleButton("kbdLang", new IconLabel(ICONS.CHECKED, "kbd US")))
+    .on(KEY_CLICK, () => {
+      exec('/home/pi/switchLayout.sh', (err, stdout, stderr) => { });
+    });
+
+  hacks.addButton(new SimpleButton("restartUI", new IconLabel(ICONS.CHECKED, "restart X")))
     .on(KEY_CLICK, () => {
       lblKvm.txt = "-";
       mqttKvm.markDirty();
-      exec('sudo systemctl restart kvm.service', (err, stdout, stderr) => {
-        // your callback
-      });
+      exec('sudo systemctl restart kvm.service', (err, stdout, stderr) => { });
+      hacks.returnFromFolder();
     });
+  deck.addPage(hacks);
+  page.addButton(new SimpleButton("activeConsole", mqttKvm), { x: 4, y: 0 }).jumpOnClick("HACKS");
+
+
+
+
 
   // finally
   connectOnce2 = true;
@@ -312,6 +266,19 @@ m1.on("connect", () => {
     ),
     { x: 3, y: 2 },
   );
+
+  let lblVolume = new CharacterLabel("xxx", "Volume", true, true)
+  lblVolume.enableCache = false;
+  lblVolume.setBackground(colorGet("black")!.value);
+  lblVolume.setForeground(colorGet("lightsteelblue")!.value);
+  let mqttVolume = new MqttCallbackLabel(m1, "sonos/0/root/172_17_0_85/volume", lblVolume, (topic: String, content) => {
+    let cstr: string = content.toString();
+    lblVolume.txt = cstr.substring(0, 3);
+    return true;
+  })
+  audio.addButton(new SimpleButton("activeConsole", mqttVolume), { x: 1, y: 0 });
+
+
   audio.addButton(
     createMqttDimStateButton(
       m1,
@@ -322,7 +289,7 @@ m1.on("connect", () => {
       "sonos/0/root/172_17_0_85/volume/set",
       ICONS.VOLUME_UP,
     ),
-    { x: 1, y: 0 },
+    { x: 2, y: 0 },
   );
   audio.addButton(
     createMqttDimStateButton(

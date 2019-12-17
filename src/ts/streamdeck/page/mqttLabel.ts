@@ -58,11 +58,13 @@ export class MqttCallbackLabel extends DeckButtonLabel {
     this.stateTopic = stateTopic;
     this.activeLabel = activeLabel;
     this.callbackFunction = callbackFunction;
-    mqtt.subscribe(stateTopic);
     if (stateTopic !== undefined) { mqtt.subscribe(stateTopic); }
     mqtt.on("message", (topic, payload) => {
-      if (this.callbackFunction(topic, payload)) {
-        this.markDirty();
+
+      if (topic === stateTopic) {
+        if (this.callbackFunction(topic, payload)) {
+          this.markDirty();
+        }
       }
     })
   }

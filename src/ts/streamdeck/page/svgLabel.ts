@@ -82,6 +82,23 @@ const TEMPLATE_CHAR_LABEL = `
     </g>
 </svg>
 `;
+
+const TEMPLATE_CHAR_LABEL_BIG = `
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <rect id="Frame" fill="#000000" x="0" y="0" width="72" height="72"></rect>
+            <rect id="Rectangle" fill="###BACKGROUND###" x="0" y="0" width="72" height="72" rx="11"></rect>
+            <text id="12345678" font-family="monospace" font-size="14" font-weight="normal" fill="###COLOR###">
+              <tspan x="###POS###" y="63">###LABEL###</tspan>
+            </text>
+            <text id="1" font-family="monospace" font-size="36" font-weight="normal" fill="###COLOR###">
+                <tspan x="5" y="37">###TXT###</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
+`;
 const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export class SvgLabel extends DeckButtonLabel {
@@ -186,9 +203,9 @@ export class CharacterLabel extends SvgLabel {
   public label: string;
   public txt: string;
   public disableFrame: boolean;
-  constructor(txt: string, label = "", disableFrame = false) {
+  constructor(txt: string, label = "", disableFrame = false, bigLabel = false) {
     if (label !== "") {
-      super(TEMPLATE_CHAR_LABEL);
+      super(bigLabel ? TEMPLATE_CHAR_LABEL_BIG : TEMPLATE_CHAR_LABEL);
     } else {
       super(TEMPLATE_CHAR);
     }
