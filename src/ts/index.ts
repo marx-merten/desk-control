@@ -97,10 +97,6 @@ let connectOnce2 = false;
 m2.on("connect", () => {
   console.log("Connected MQTT-plain");
 
-  // page.addButton(
-  //   new SimpleButton("activeConsole", new CharacterLabel("test", "lab", true));
-  // );
-
   let lblKvm = new CharacterLabel("test", "lab", true, false)
   lblKvm.enableCache = false;
   lblKvm.setBackground(colorGet("lavender")!.value);
@@ -128,6 +124,12 @@ m2.on("connect", () => {
       lblKvm.txt = "-";
       mqttKvm.markDirty();
       exec('sudo systemctl restart kvm.service', (err, stdout, stderr) => { });
+      hacks.returnFromFolder();
+    });
+
+  hacks.addButton(new SimpleButton("restartUI", new IconLabel(ICONS.CHECKED, "REBOOT")))
+    .on(KEY_CLICK, () => {
+      exec('sudo reboot', (err, stdout, stderr) => { });
       hacks.returnFromFolder();
     });
   deck.addPage(hacks);
