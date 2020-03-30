@@ -19,11 +19,17 @@ import { SubMenu } from "./streamdeck/page/submenueDeckPage";
 import { createMqttIconStateButton, createMqttPowerStateButton } from "./streamdeck/homeDeck/buttonTemplates";
 import { CharacterLabel, IconLabel, SvgLabel } from "./streamdeck/page/svgLabel";
 import { exec } from "child_process";
+import { StateSwitchLabel } from "./streamdeck/page/simpleLabels"
 import { ReturnLastKvmStateButton } from "./streamdeck/homeDeck/returnButton";
 import { createKvmFavs } from "./streamdeck/pages/kvmFavs";
+import { ElgatoConnector } from "./streamdeck/connectors/elgatoConnector";
+import { KeyLight } from "./util/elgato-api";
+
 
 const deck = new DeckStack();
 const page = new SimpleDeckPage("MAIN");
+const elgato = new ElgatoConnector();
+setTimeout(() => { elgato.startUpdate() }, 1000)
 
 // Add Sample Page and Demo Button
 
@@ -34,6 +40,13 @@ deck.setMainPage("MAIN");
 //    Demo PAGE
 // ---------------
 // demoMain(deck);
+
+// Light Page
+// ----------------
+const light = new SubMenu("LIGHT", deck);
+deck.addPage(light);
+page.addButton(new SimpleButton("light", new IconLabel(ICONS.FOLDER, "light")), { x: 4, y: 1 }).jumpOnClick("LIGHT");
+
 
 // ---------------
 //    KVM PAGE
@@ -109,6 +122,7 @@ m2.on("connect", () => {
   })
 
 
+
   // ----------------------
   //   SOME BASIC HACKS
   // ----------------------
@@ -132,6 +146,22 @@ m2.on("connect", () => {
       exec('sudo reboot', (err, stdout, stderr) => { });
       hacks.returnFromFolder();
     });
+
+  let lblWiimoteBattery = new CharacterLabel("test", "lab", true, false)
+  lblWiimoteBattery.enableCache = false;
+  lblWiimoteBattery.setBackground(colorGet("lavender")!.value);
+  let wiimoteBattery = new MqttCallbackLabel(m2, "/homeoffice/desk/kvm/wiimote/battery", lblWiimoteBattery, (topic, content) => {
+    let cstr: string = content.toString();
+    if (cstr !== "-1") {
+      lblWiimoteBattery.txt = "C";
+      lblWiimoteBattery.label = cstr.substring(0, 7);
+    } else {
+      lblWiimoteBattery.txt = "-";
+      lblWiimoteBattery.label = "---"
+    } return true;
+  })
+  hacks.addButton(new SimpleButton("wiimote", wiimoteBattery), { x: 0, y: 2 });
+
   deck.addPage(hacks);
   page.addButton(new SimpleButton("activeConsole", mqttKvm), { x: 4, y: 0 }).jumpOnClick("HACKS");
 
@@ -159,8 +189,8 @@ m1.on("connect", () => {
       "hm-rpc/1/000858A994DA3B/4/STATE/set",
     ),
     {
-      x: 0,
-      y: 2,
+      x: 1,
+      y: 1,
     },
   );
   page.addButton(
@@ -172,8 +202,8 @@ m1.on("connect", () => {
       "hm-rpc/1/0001D8A9933FDD/3/STATE/set",
     ),
     {
-      x: 1,
-      y: 2,
+      x: 2,
+      y: 1,
     },
   );
   page.addButton(
@@ -190,7 +220,7 @@ m1.on("connect", () => {
       y: 2,
     },
   );
-  page.addButton(
+  light.addButton(
     createMqttPowerStateButton(
       m1,
       "EDesk",
@@ -201,11 +231,11 @@ m1.on("connect", () => {
       ICONS.SW_OFF,
     ),
     {
-      x: 1,
-      y: 1,
+      x: 0,
+      y: 0,
     },
   );
-  page.addButton(
+  light.addButton(
     createMqttPowerStateButton(
       m1,
       "EDesk",
@@ -216,8 +246,8 @@ m1.on("connect", () => {
       ICONS.SW_OFF,
     ),
     {
-      x: 2,
-      y: 1,
+      x: 1,
+      y: 0,
     },
   );
 
@@ -316,6 +346,55 @@ m1.on("connect", () => {
 
   connectOnce = true;
 });
+
+let lightLbl = new StateSwitchLabel()
+lightLbl.addState("___UNDEFINED___", new IconLabel(ICONS.BULB, "elgato").setBackground(DeckConfig.colDefaultInactive))
+  .addState("false", new IconLabel(ICONS.BULB, "elgato").setBackground(DeckConfig.colDefaultFalse))
+  .addState("true", new IconLabel(ICONS.BULB, "elgato").setBackground(DeckConfig.colDefaultTrue));
+page.addButton(new SimpleButton("elgato", lightLbl), {
+  x: 3,
+  y: 1,
+}).on("keyClick", (key) => {
+  if (lightLbl.state === "false") {
+    elgato.switch(1);
+  } else {
+    elgato.switch(0);
+  }
+})
+
+elgato.on("updatedLight", (kl: KeyLight) => {
+  if (kl.name.match("left")) {
+    if (kl.options && kl.options.lights[0]) {
+      if (kl.options.lights[0].on == 1) lightLbl.state = "true"
+      else lightLbl.state = "false"
+    }
+  }
+})
+elgato.on("newLight", (kl: KeyLight) => {
+  if (kl.name.match("left")) {
+    if (kl.options && kl.options.lights[0]) {
+      if (kl.options.lights[0].on == 1) lightLbl.state = "true"
+      else lightLbl.state = "false"
+    }
+  }
+})
+
+
+
+
+// const lbl = new MqttLabel(mqqt, topic);
+//   lbl
+//     .addState("___UNDEFINED___", new IconLabel(icon, location).setBackground(DeckConfig.colDefaultInactive))
+//     .addState("false", new IconLabel(iconOff, location).setBackground(DeckConfig.colDefaultFalse))
+//     .addState("true", new IconLabel(icon, location).setBackground(DeckConfig.colDefaultTrue));
+
+//   const b = new SimpleButton(name, lbl);
+//   b.on(KEY_CLICK, (key: StreamKeyWrapper) => {
+//     const newState = lbl.state === "true" ? "false" : "true";
+//     mqqt.publish(setTopic, newState);
+//   });
+//   return b;
+
 
 // ----------------------
 //    Timing and Clock

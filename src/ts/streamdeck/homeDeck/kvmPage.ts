@@ -21,9 +21,9 @@ export class KVMPage extends SubMenu {
   private btnIn: Array<{ btn: DeckButton; lbl: CharacterLabel }> = [];
 
   private currentState = State.normal;
-  private currentInputs = [0, 0, 0, 0];
+  private currentInputs = [0, 0, 0, 0, 0];
   private selectedOutputIndex = 0;
-  private outputs = [1, 2, 3, 8];
+  private outputs = [1, 2, 3, 4, 8];
   private lastConnect = 0;
 
   constructor(name: string, stack: DeckStack, returnTo?: string) {
@@ -32,7 +32,8 @@ export class KVMPage extends SubMenu {
     this.hlpAddButton("OUT1", "X", this.btnOut, 0, 0, "left");
     this.hlpAddButton("OUT2", "X", this.btnOut, 1, 0, "center");
     this.hlpAddButton("OUT3", "X", this.btnOut, 2, 0, "right");
-    this.hlpAddButton("OUT4", "X", this.btnOut, 4, 0, "eltron");
+    this.hlpAddButton("OUT4", "X", this.btnOut, 3, 0, "CenterB");
+    this.hlpAddButton("OUT5", "X", this.btnOut, 4, 0, "eltron");
 
     this.hlpAddButton("IN1", "1", this.btnIn, 0, 1).lbl.setBackground(
       DeckConfig.colDefaultInactive,
