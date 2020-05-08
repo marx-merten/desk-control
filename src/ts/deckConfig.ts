@@ -6,7 +6,7 @@ export class DeckConfig {
   public static numberOfButtons = DeckConfig.width * DeckConfig.height;
   public static clickMinimumTimeMs = 10;
   public static ICON_SIZE = 72;
-  public static kvmHost = "vm0808hb:23";
+  public static kvmHost = "172.17.0.39:23";
   public static kvmUser = "deskkvm";
   public static kvmPassword = "kvmkvm";
   public static colDefault = colorGet("lightsteelblue")!.value;
