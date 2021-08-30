@@ -18,6 +18,7 @@ export class MqttLabel extends StateSwitchLabel {
     if (activeTopic !== undefined) { mqtt.subscribe(activeTopic); }
     mqtt.on("message", (topic, content) => {
       if (activeTopic !== undefined && topic === activeTopic) {
+
         if (content.toString() === "true") {
           this.lastState = this.state!;
           this.state = "__active__";

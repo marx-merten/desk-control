@@ -32,6 +32,28 @@ export function createKvmFavs(kvm: KVMPage, rtLastKVM: ReturnLastKvmStateButton,
             kvmApi.execute(() => { });
             rtLastKVM.modeSwitched({ lbl: "work", mode: "03" })
         });
+    favs
+        .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "EDesk")), {
+            x: 2,
+            y: 0,
+        })
+        .on(KEY_CLICK, () => {
+            const kvmApi = kvm.createKvm();
+            kvmApi.addCommand("LO 07");
+            kvmApi.execute(() => { });
+            rtLastKVM.modeSwitched({ lbl: "EDesk", mode: "07" })
+        });
+    favs
+        .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "SDesk")), {
+            x: 2,
+            y: 1,
+        })
+        .on(KEY_CLICK, () => {
+            const kvmApi = kvm.createKvm();
+            kvmApi.addCommand("LO 08");
+            kvmApi.execute(() => { });
+            rtLastKVM.modeSwitched({ lbl: "SDesk", mode: "08" })
+        });
 
     favs
         .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "game")), {

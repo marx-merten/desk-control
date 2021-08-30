@@ -28,8 +28,6 @@ import { KeyLight } from "./util/elgato-api";
 
 const deck = new DeckStack();
 const page = new SimpleDeckPage("MAIN");
-const elgato = new ElgatoConnector();
-setTimeout(() => { elgato.startUpdate() }, 1000)
 
 // Add Sample Page and Demo Button
 
@@ -121,6 +119,20 @@ m2.on("connect", () => {
     return true;
   })
 
+  page.addButton(
+    createMqttPowerStateButton(
+      m2,
+      "elgato",
+      "elgato",
+      "iot/0/office/desklight/group/desk/state",
+      "iot/0/office/desklight/group/desk/state/set",
+    ),
+    {
+      x: 3,
+      y: 1,
+    },
+  );
+
 
 
   // ----------------------
@@ -206,7 +218,7 @@ m1.on("connect", () => {
       y: 1,
     },
   );
-  page.addButton(
+  light.addButton(
     createMqttPowerStateButton(
       m1,
       "MMini",
@@ -216,11 +228,11 @@ m1.on("connect", () => {
       ICONS.DB,
     ),
     {
-      x: 2,
-      y: 2,
+      x: 0,
+      y: 0,
     },
   );
-  light.addButton(
+  page.addButton(
     createMqttPowerStateButton(
       m1,
       "EDesk",
@@ -231,8 +243,8 @@ m1.on("connect", () => {
       ICONS.SW_OFF,
     ),
     {
-      x: 0,
-      y: 0,
+      x: 2,
+      y: 2,
     },
   );
   light.addButton(
@@ -279,9 +291,9 @@ m1.on("connect", () => {
       m1,
       "sonos",
       "sonos",
-      "sonos/0/root/172_17_0_85/state",
+      "sonos/0/root/172_17_0_147/state",
       [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
-      "sonos/0/root/172_17_0_85/state/set",
+      "sonos/0/root/172_17_0_147/state/set",
     ),
     { x: 0, y: 1 },
   );
@@ -292,9 +304,9 @@ m1.on("connect", () => {
       m1,
       "sonos",
       "sonos",
-      "sonos/0/root/172_17_0_85/state",
+      "sonos/0/root/172_17_0_147/state",
       [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
-      "sonos/0/root/172_17_0_85/state/set",
+      "sonos/0/root/172_17_0_147/state/set",
     ),
     { x: 3, y: 2 },
   );
@@ -303,7 +315,7 @@ m1.on("connect", () => {
   lblVolume.enableCache = false;
   lblVolume.setBackground(colorGet("black")!.value);
   lblVolume.setForeground(colorGet("lightsteelblue")!.value);
-  let mqttVolume = new MqttCallbackLabel(m1, "sonos/0/root/172_17_0_85/volume", lblVolume, (topic: String, content) => {
+  let mqttVolume = new MqttCallbackLabel(m1, "sonos/0/root/172_17_0_147/volume", lblVolume, (topic: String, content) => {
     let cstr: string = content.toString();
     lblVolume.txt = cstr.substring(0, 3);
     return true;
@@ -315,10 +327,10 @@ m1.on("connect", () => {
     createMqttDimStateButton(
       m1,
       "VolUp",
-      "sonos/0/root/172_17_0_85/volume",
+      "sonos/0/root/172_17_0_147/volume",
       5,
       undefined,
-      "sonos/0/root/172_17_0_85/volume/set",
+      "sonos/0/root/172_17_0_147/volume/set",
       ICONS.VOLUME_UP,
     ),
     { x: 2, y: 0 },
@@ -327,10 +339,10 @@ m1.on("connect", () => {
     createMqttDimStateButton(
       m1,
       "VolDown",
-      "sonos/0/root/172_17_0_85/volume",
+      "sonos/0/root/172_17_0_147/volume",
       -5,
       undefined,
-      "sonos/0/root/172_17_0_85/volume/set",
+      "sonos/0/root/172_17_0_147/volume/set",
       ICONS.VOLUME_DOWN,
     ),
     { x: 0, y: 0 },
@@ -341,43 +353,12 @@ m1.on("connect", () => {
       y: 1,
     })
     .on("keyClick", () => {
-      m1.publish("sonos/0/root/172_17_0_85/next/set", "true");
+      m1.publish("sonos/0/root/172_17_0_147/next/set", "true");
     });
 
   connectOnce = true;
 });
 
-let lightLbl = new StateSwitchLabel()
-lightLbl.addState("___UNDEFINED___", new IconLabel(ICONS.BULB, "elgato").setBackground(DeckConfig.colDefaultInactive))
-  .addState("false", new IconLabel(ICONS.BULB, "elgato").setBackground(DeckConfig.colDefaultFalse))
-  .addState("true", new IconLabel(ICONS.BULB, "elgato").setBackground(DeckConfig.colDefaultTrue));
-page.addButton(new SimpleButton("elgato", lightLbl), {
-  x: 3,
-  y: 1,
-}).on("keyClick", (key) => {
-  if (lightLbl.state === "false") {
-    elgato.switch(1);
-  } else {
-    elgato.switch(0);
-  }
-})
-
-elgato.on("updatedLight", (kl: KeyLight) => {
-  if (kl.name.match("left")) {
-    if (kl.options && kl.options.lights[0]) {
-      if (kl.options.lights[0].on == 1) lightLbl.state = "true"
-      else lightLbl.state = "false"
-    }
-  }
-})
-elgato.on("newLight", (kl: KeyLight) => {
-  if (kl.name.match("left")) {
-    if (kl.options && kl.options.lights[0]) {
-      if (kl.options.lights[0].on == 1) lightLbl.state = "true"
-      else lightLbl.state = "false"
-    }
-  }
-})
 
 
 
