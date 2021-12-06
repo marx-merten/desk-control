@@ -107,6 +107,10 @@ let connectOnce2 = false;
 // Add plain mqqt channel for synergy status
 m2.on("connect", () => {
   console.log("Connected MQTT-plain");
+  if (connectOnce2) {
+    console.log("Reconnect requested, ignore adding buttons");
+    return;
+  }
 
   let lblKvm = new CharacterLabel("test", "lab", true, false)
   lblKvm.enableCache = false;
