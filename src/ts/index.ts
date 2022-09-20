@@ -212,6 +212,20 @@ m1.on("connect", () => {
   page.addButton(
     createMqttPowerStateButton(
       m1,
+      "Light",
+      "Espresso",
+      "hm-rpc/1/0001DD8993EB6D/3/STATE",
+      "hm-rpc/1/0001DD8993EB6D/3/STATE/set",ICONS.ESPRESSO
+    ),
+    {
+      x: 3,
+      y: 0,
+    },
+  );
+
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
       "DeskLight",
       "Desk",
       "hm-rpc/1/0001D8A9933FDD/3/STATE",
@@ -251,7 +265,7 @@ m1.on("connect", () => {
       y: 2,
     },
   );
-  light.addButton(
+  page.addButton(
     createMqttPowerStateButton(
       m1,
       "EDesk",
@@ -263,7 +277,7 @@ m1.on("connect", () => {
     ),
     {
       x: 1,
-      y: 0,
+      y: 2,
     },
   );
 
