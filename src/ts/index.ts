@@ -94,10 +94,10 @@ page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), 
 // ------------------------------
 //  Setup mqtt relevant elements
 // ------------------------------
-const m1 = mqttConnect("mqtt://homebroker.local.marx-merten.de:9883");
+const m1 = mqttConnect("mqtt://172.17.0.46:9883");
 m1.setMaxListeners(200);
 
-const m2 = mqttConnect("mqtt://homebroker.local.marx-merten.de:1883");
+const m2 = mqttConnect("mqtt://172.17.0.46:1883");
 m2.setMaxListeners(200);
 
 
@@ -188,6 +188,9 @@ m2.on("connect", () => {
   // finally
   connectOnce2 = true;
 });
+// m1.on("message", (topic, content) => {
+//   console.log("RECEIVED MQTT "+topic+"::"+content)
+// });
 
 m1.on("connect", () => {
   // tslint:disable-next-line:no-console
@@ -196,6 +199,19 @@ m1.on("connect", () => {
     console.log("Reconnect requested, ignore adding buttons");
     return;
   }
+  page.addButton(
+    createMqttPowerStateButton(
+      m1,
+      "Light",
+      "ELight",
+      "hm-rpc/1/000B9F298DFF03/2/STATE",
+      "hm-rpc/1/000B9F298DFF03/2/STATE/set",
+    ),
+    {
+      x: 0,
+      y: 1,
+    },
+  );
   page.addButton(
     createMqttPowerStateButton(
       m1,
@@ -302,7 +318,7 @@ m1.on("connect", () => {
       "hm-rpc/0/OEQ1850720/1/LEVEL/set",
       "hm-rpc/0/OEQ1850720/1/WORKING",
     ),
-    { x: 0, y: 1 },
+    { x: 0, y: 2 },
   );
   audio.addButton(
     createMqttIconStateButton(

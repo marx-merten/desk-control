@@ -17,6 +17,8 @@ export class MqttLabel extends StateSwitchLabel {
     mqtt.subscribe(stateTopic);
     if (activeTopic !== undefined) { mqtt.subscribe(activeTopic); }
     mqtt.on("message", (topic, content) => {
+      // console.log("RECEIVED MQTT-state "+topic)
+      // console.log("check with state Topic "+stateTopic)
       if (activeTopic !== undefined && topic === activeTopic) {
 
         if (content.toString() === "true") {
@@ -33,6 +35,7 @@ export class MqttLabel extends StateSwitchLabel {
         this.lastState = content.toString();
         if (!this.activeSetting) {
           this.state = this.lastState;
+          // console.log("SET state to "+this.state+" for "+topic+ " on TOPIC "+content.toString())
         }
       }
     });
