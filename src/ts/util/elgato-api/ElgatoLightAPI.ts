@@ -1,4 +1,4 @@
-import bonjour, { Bonjour, Service } from "bonjour";
+import bonjour, { Bonjour, RemoteService, Service } from "bonjour";
 import { put, get } from "request-promise";
 import { EventEmitter } from "events";
 import { KeyLight, KeyLightOptions } from "./types/KeyLight";
@@ -21,7 +21,7 @@ export class ElgatoLightAPI extends EventEmitter {
 
         // Continually monitors for a new keylight to be added
         const browser = this.bonjour.find({ type: 'elg' });
-        browser.on('up', (service: Service) => {
+        browser.on('up', (service: RemoteService) => {
             this.addKeylight(service);
         });
     }
