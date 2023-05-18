@@ -56,15 +56,15 @@ export function createKvmFavs(kvm: KVMPage, rtLastKVM: ReturnLastKvmStateButton,
         });
 
     favs
-        .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "game")), {
+        .addButton(new SimpleButton("profile1", new IconLabel(ICONS.KVM, "work-only")), {
             x: 1,
             y: 1,
         })
         .on(KEY_CLICK, () => {
             const kvmApi = kvm.createKvm();
-            kvmApi.addCommand("LO 04");
+            kvmApi.addCommand("LO 09");
             kvmApi.execute(() => { });
-            rtLastKVM.modeSwitched({ lbl: "game", mode: "04" })
+            rtLastKVM.modeSwitched({ lbl: "work-only", mode: "09" })
         });
 
     favs
