@@ -94,10 +94,10 @@ page.addButton(new SimpleButton("audio", new IconLabel(ICONS.FOLDER, "audio")), 
 // ------------------------------
 //  Setup mqtt relevant elements
 // ------------------------------
-const m1 = mqttConnect("mqtt://172.17.0.46:9883");
+const m1 = mqttConnect("mqtt://172.17.0.19:9883");
 m1.setMaxListeners(200);
 
-const m2 = mqttConnect("mqtt://172.17.0.46:1883");
+const m2 = mqttConnect("mqtt://172.17.11.18:1883");
 m2.setMaxListeners(200);
 
 
@@ -129,7 +129,7 @@ m2.on("connect", () => {
       "elgato",
       "elgato",
       "iot/0/office/desklight/group/desk/state",
-      "iot/0/office/desklight/group/desk/state/set",
+      "homebroker/cmd/elgato/studiolights/state",
     ),
     {
       x: 3,
@@ -188,9 +188,9 @@ m2.on("connect", () => {
   // finally
   connectOnce2 = true;
 });
-// m1.on("message", (topic, content) => {
-//   console.log("RECEIVED MQTT "+topic+"::"+content)
-// });
+m1.on("message", (topic, content) => {
+  console.log("RECEIVED MQTT "+topic+"::"+content)
+});
 
 m1.on("connect", () => {
   // tslint:disable-next-line:no-console
@@ -325,9 +325,9 @@ m1.on("connect", () => {
       m1,
       "sonos",
       "sonos",
-      "sonos/0/root/172_17_0_147/state",
+      "sonos/0/root/172_17_0_143/state",
       [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
-      "sonos/0/root/172_17_0_147/state/set",
+      "sonos/0/root/172_17_0_143/state/set",
     ),
     { x: 0, y: 1 },
   );
@@ -338,9 +338,9 @@ m1.on("connect", () => {
       m1,
       "sonos",
       "sonos",
-      "sonos/0/root/172_17_0_147/state",
+      "sonos/0/root/172_17_0_143/state",
       [{ icon: ICONS.PAUSE, state: "play" }, { icon: ICONS.PLAY, state: "pause" }, { icon: ICONS.PLAY, state: "stop" }],
-      "sonos/0/root/172_17_0_147/state/set",
+      "sonos/0/root/172_17_0_143/state/set",
     ),
     { x: 3, y: 2 },
   );
@@ -349,7 +349,7 @@ m1.on("connect", () => {
   lblVolume.enableCache = false;
   lblVolume.setBackground(colorGet("black")!.value);
   lblVolume.setForeground(colorGet("lightsteelblue")!.value);
-  let mqttVolume = new MqttCallbackLabel(m1, "sonos/0/root/172_17_0_147/volume", lblVolume, (topic: String, content) => {
+  let mqttVolume = new MqttCallbackLabel(m1, "sonos/0/root/172_17_0_143/volume", lblVolume, (topic: String, content) => {
     let cstr: string = content.toString();
     lblVolume.txt = cstr.substring(0, 3);
     return true;
@@ -361,10 +361,10 @@ m1.on("connect", () => {
     createMqttDimStateButton(
       m1,
       "VolUp",
-      "sonos/0/root/172_17_0_147/volume",
+      "sonos/0/root/172_17_0_143/volume",
       5,
       undefined,
-      "sonos/0/root/172_17_0_147/volume/set",
+      "sonos/0/root/172_17_0_143/volume/set",
       ICONS.VOLUME_UP,
     ),
     { x: 2, y: 0 },
@@ -373,10 +373,10 @@ m1.on("connect", () => {
     createMqttDimStateButton(
       m1,
       "VolDown",
-      "sonos/0/root/172_17_0_147/volume",
+      "sonos/0/root/172_17_0_143/volume",
       -5,
       undefined,
-      "sonos/0/root/172_17_0_147/volume/set",
+      "sonos/0/root/172_17_0_143/volume/set",
       ICONS.VOLUME_DOWN,
     ),
     { x: 0, y: 0 },
@@ -387,7 +387,7 @@ m1.on("connect", () => {
       y: 1,
     })
     .on("keyClick", () => {
-      m1.publish("sonos/0/root/172_17_0_147/next/set", "true");
+      m1.publish("sonos/0/root/172_17_0_143/next/set", "true");
     });
 
   connectOnce = true;
