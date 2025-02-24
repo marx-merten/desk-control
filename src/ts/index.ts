@@ -208,7 +208,7 @@ m1.on("connect", () => {
       "hm-rpc/1/000B9F298DFF03/2/STATE/set",
     ),
     {
-      x: 0,
+      x: 2,
       y: 1,
     },
   );
@@ -248,7 +248,7 @@ m1.on("connect", () => {
       "hm-rpc/1/0001D8A9933FDD/3/STATE/set",
     ),
     {
-      x: 2,
+      x: 0,
       y: 1,
     },
   );
